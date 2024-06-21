@@ -1,0 +1,88 @@
+author: assistant
+conversation_id: 8b024954-fa38-4e90-8025-f7ad26cf5d23
+message_id: 85f3dd4e-f5c9-4cd8-adfc-29dc6ec735d2
+tags: chatgptmessage
+timestamp: 202406051913070000
+title: conv8b024954-fa38-4e90-8025-f7ad26cf5d23_msg14_85f3dd4e-f5c9-4cd8-adfc-29dc6ec735d2
+type: text/vnd.tiddlywiki
+
+To achieve this, we need to ensure that all messages belonging to the same conversation are assigned the same `conversation_id`. We'll modify the script to extract the `conversation_id` from the `chatgptconversation` tiddler and then use it for all the messages within that conversation. Here's the updated script:
+
+```python
+import json
+import uuid
+import sys
+import os
+
+def process_exported_json(input_file, output_dir):
+    with open(input_file, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+
+    conversations = {}
+
+    # Extract conversation details
+    for node_id, node_data in data['mapping'].items():
+        message = node_data['message']
+        if message and message['create_time'] is not None:
+            conversation_id = data['id']
+            conversation_title = data['title']
+            conversations[conversation_id] = {
+                'title': conversation_title,
+                'id': conversation_id
+            }
+            break
+
+    # Extract messages
+    for node_id, node_data in data['mapping'].items():
+        message = node_data['message']
+        if message and message['create_time'] is not None:
+            conversation_id = conversations[data['id']]['id']
+            message_id = str(uuid.uuid4()).replace("-", "")
+            timestamp = str(int(message['create_time'] * 1000))  # Convert to milliseconds
+            title = f"conv{conversation_id}_msg{message['id']}_{message_id}"
+
+            tiddler = {
+                'title': title,
+                'text': message['content']['parts'][0],
+                'author': message['author']['role'],
+                'conversation_id': conversation_id,
+                'message_id': message_id,
+                'tags': 'chatgptmessage',
+                'timestamp': timestamp
+            }
+
+            output_filename = os.path.join(output_dir, f'{title}.json')
+            with open(output_filename, 'w', encoding='utf-8') as f:
+                json.dump(tiddler, f, indent=4)
+
+    # Save conversation details
+    output_filename = os.path.join(output_dir, 'conversation.json')
+    with open(output_filename, 'w', encoding='utf-8') as f:
+        json.dump(list(conversations.values()), f, indent=4)
+
+if __name__ == "__main__":
+    if len(sys.argv) != 3:
+        print("Usage: python import_json.py <input_json_file> <output_directory>")
+        sys.exit(1)
+
+    input_file = sys.argv[1]
+    output_dir = sys.argv[2]
+
+    if not os.path.isfile(input_file):
+        print(f"Error: Input file '{input_file}' does not exist.")
+        sys.exit(1)
+
+    if not os.path.isdir(output_dir):
+        print(f"Error: Output directory '{output_dir}' does not exist.")
+        sys.exit(1)
+
+    process_exported_json(input_file, output_dir)
+```
+
+In this script:
+
+- We extract the conversation details (conversation ID and title) from the first message encountered in the JSON data.
+- We then use this `conversation_id` for all subsequent messages within the same conversation.
+- Each message is saved as a separate JSON file in the output directory, and conversation details are saved separately in a file named `conversation.json`.
+
+Run the script as before, and it should create individual JSON files for each message, with the `conversation_id` being identical for all messages within the same conversation.

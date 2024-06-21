@@ -1,0 +1,31 @@
+author: assistant
+conversation_id: 8b024954-fa38-4e90-8025-f7ad26cf5d23
+message_id: 2ecb678e-1e5d-4618-a2fe-19e1ee0d3669
+tags: chatgptmessage
+timestamp: 202406051910040000
+title: conv8b024954-fa38-4e90-8025-f7ad26cf5d23_msg1_2ecb678e-1e5d-4618-a2fe-19e1ee0d3669
+type: text/vnd.tiddlywiki
+
+The issue might be related to the way you're filtering and retrieving the `conversation_id`. Here's a revised version of your TiddlyWiki template:
+
+```html
+<$list filter="[is[current]tag[chatgptconversation]]">
+    <$vars conversation=<<currentTiddler>>>
+        <h2><<conversation>></h2>
+        <$list filter="[conversation_id{!!title}sort[timestamp]]" counter="num">
+            <$vars message_id=<<currentTiddler>>>
+                <$details summary= open="yes">
+                    <$text text=/>
+                    <p class="text"><$transclude mode="block"/><br>
+                    <$macrocall $name="annotate" message-id=<<message_id>>/></p>
+                    <hr>
+                    tokens: <$editor-counter field="text" mode=word/> || 
+                    <$link/><br>
+                </$details>
+            </$vars>
+        </$list>
+    </$vars>
+</$list>
+```
+
+This template iterates over tiddlers tagged as `chatgptconversation`, then for each conversation, it retrieves the `conversation_id` and iterates over tiddlers with the same `conversation_id`. For each message, it retrieves the `message_id` and transcludes the content, along with other details. Make sure the `conversation_id` and `message_id` fields are set correctly in your tiddlers.

@@ -1,0 +1,54 @@
+Annotation: off
+Template: 2
+color: red
+created: 20240131165435884
+description: this is the template to generate each conversation in a single tiddler. this is where all the formatting could take place. there is no css style sheet yet but the hooks are there
+modified: 20240620173604151
+tags: chatarchivist-template
+title: Button Template
+type: text/vnd.tiddlywiki
+
+<div class="hub">
+
+<$list filter="[is[current]chatgptelement[conversation]]">
+<$vars conversation_index={{!!conversation_index}} first="1" conversation_title={{!!conversation_title}} tiddler-title={{!!title}}>
+
+<$set name="previous" filter="[<conversation_index>subtract[1]]">
+<$set name="next" filter="[<conversation_index>add[1]]">
+<$set name="last" filter="[conversation_id{!!title}chatgptmessage[]count[]]">
+
+<div class="tiddler-body">
+<div class="conversation-title">
+<h1>{{!!conversation_title}}</h1>
+</div>
+
+<div class="navigation_button">
+<$button>First (#<<first>>)
+<$action-setfield $tiddler="transcludeMessage" conversation_index="1" id={{!!title}}/>
+<$action-setfield $tiddler=<<currentTiddler>> conversation_index="1"/>
+</$button>
+
+<$button>Previous (#<<previous>>)
+<$action-setfield $tiddler="transcludeMessage" conversation_index=<<previous>> id={{!!title}}/>
+<$action-setfield $tiddler=<<currentTiddler>> conversation_index={{{[<conversation_index>add[-1]]}}}/>
+</$button>
+
+Message #<<conversation_index>> of <<last>>
+
+
+<$button>Next (#<<next>>)
+<$action-setfield $tiddler="transcludeMessage" conversation_index=<<next>> id={{!!title}}/>
+<$action-setfield $tiddler=<<currentTiddler>> conversation_index={{{[<conversation_index>add[1]]}}}/>
+</$button>
+
+
+<$button>Last (#<<last>>)
+<$action-setfield $tiddler="transcludeMessage" conversation_index=<<last>> id={{!!title}}/>
+<$action-setfield $tiddler=<<currentTiddler>> conversation_index=<<last>>/>
+</$button>
+</div>
+
+<div class="transclusion">
+{{transcludeMessage}}
+</div>
+</div>

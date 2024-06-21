@@ -1,0 +1,9 @@
+author: user
+conversation_id: 80de3e47-0f2a-4053-b6ee-83a6b6e7cf8d
+message_id: eae67064-74b7-4f88-872f-fb0e27fe3e0d
+tags: chatgptmessage
+timestamp: 202406141528420000
+title: conv80de3e47-0f2a-4053-b6ee-83a6b6e7cf8d_msg15_eae67064-74b7-4f88-872f-fb0e27fe3e0d
+type: text/vnd.tiddlywiki
+
+why is this code generating timestamps like this "197001202119350000", that time is in the year 1970

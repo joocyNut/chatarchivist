@@ -1,0 +1,50 @@
+author: assistant
+conversation_id: 3a982079-ab5f-472b-a65e-c7761e6a1a90
+message_id: 75bfdb06-cff7-4135-b5dd-0570c1bd3f95
+tags: chatgptmessage
+timestamp: 202406031813240000
+title: conv3a982079-ab5f-472b-a65e-c7761e6a1a90_msg4_75bfdb06-cff7-4135-b5dd-0570c1bd3f95
+type: text/vnd.tiddlywiki
+
+Sure, here's how you can implement the search function using TiddlyWiki code:
+
+First, create a new tiddler called "Search by Conversation Title" or similar. This will contain the search form.
+
+```html
+\define search-by-title()
+<div class="search-form">
+    <form>
+        <label for="conversation-title">Search by Conversation Title:</label><br>
+        <input type="text" id="conversation-title" name="conversation-title"><br><br>
+        <input type="button" value="Search" onclick="searchByTitle()">
+    </form>
+</div>
+
+<script>
+function searchByTitle() {
+    var title = document.getElementById("conversation-title").value;
+    // Redirect to search result tiddler with title parameter
+    story.pushState(null, null, "#" + encodeURIComponent("SearchResults_" + title));
+}
+</script>
+\end
+```
+
+Then, create another tiddler named "SearchResults" to display the search results.
+
+```html
+\define search-results()
+<div class="search-results">
+    <$list filter="[title[SearchResults_$:/temp/conversation-title]]">
+        <$list filter="[conversation_title{!!conversation_title}]">
+            <<annotation-tiddler>> <!-- Include annotation -->
+            <<annotation-header-text>> <!-- Include header text -->
+            <!-- Include conversation navigation buttons -->
+            <!-- Include conversation messages -->
+        </$list>
+    </$list>
+</div>
+\end
+```
+
+Now, whenever a user inputs a conversation title and clicks "Search", it will redirect to a URL like `#SearchResults_ConversationTitle`. The "SearchResults" tiddler will then display the search results based on the entered conversation title.

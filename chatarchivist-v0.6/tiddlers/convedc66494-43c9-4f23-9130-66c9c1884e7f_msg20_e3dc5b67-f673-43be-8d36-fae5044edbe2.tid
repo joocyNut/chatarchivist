@@ -1,0 +1,23 @@
+author: assistant
+conversation_id: edc66494-43c9-4f23-9130-66c9c1884e7f
+message_id: e3dc5b67-f673-43be-8d36-fae5044edbe2
+tags: chatgptmessage
+timestamp: 202405301732480000
+title: convedc66494-43c9-4f23-9130-66c9c1884e7f_msg20_e3dc5b67-f673-43be-8d36-fae5044edbe2
+type: text/vnd.tiddlywiki
+
+You can test your JavaScript code online using various code playgrounds and online editors. Here are a few popular options:
+
+1. **CodePen**: CodePen is a popular online community for testing and showcasing HTML, CSS, and JavaScript code snippets. You can create a new pen, paste your HTML, CSS, and JavaScript code, and see the live result instantly.
+   Website: [CodePen](https://codepen.io/)
+
+2. **JSFiddle**: JSFiddle is another online editor that allows you to write and test HTML, CSS, and JavaScript code in real-time. It provides separate panels for HTML, CSS, and JavaScript, making it easy to organize your code.
+   Website: [JSFiddle](https://jsfiddle.net/)
+
+3. **JS Bin**: JS Bin is a collaborative JavaScript debugging tool that allows you to test and debug JavaScript, HTML, and CSS code in real-time. It also supports collaboration features, making it great for team projects.
+   Website: [JS Bin](https://jsbin.com/)
+
+4. **Replit**: Replit is an online IDE that supports multiple programming languages, including JavaScript. You can create a new JavaScript project, write your code, and run it directly in the browser.
+   Website: [Replit](https://replit.com/)
+
+These platforms offer a convenient way to test and share your JavaScript code online. Choose the one that best fits your needs and start coding!

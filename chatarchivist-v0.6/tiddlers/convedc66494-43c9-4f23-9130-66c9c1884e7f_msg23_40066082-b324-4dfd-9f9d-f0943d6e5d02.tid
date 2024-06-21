@@ -1,0 +1,83 @@
+author: assistant
+conversation_id: edc66494-43c9-4f23-9130-66c9c1884e7f
+message_id: 40066082-b324-4dfd-9f9d-f0943d6e5d02
+tags: chatgptmessage
+timestamp: 202405301734090000
+title: convedc66494-43c9-4f23-9130-66c9c1884e7f_msg23_40066082-b324-4dfd-9f9d-f0943d6e5d02
+type: text/vnd.tiddlywiki
+
+Creating a post-modern style for your wiki website involves embracing bold colors, asymmetrical layouts, experimental typography, and unconventional design elements. Here's some CSS to give your wiki that post-modern flair:
+
+```css
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #000;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #ff2d55;
+    padding: 20px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 3em;
+    margin: 0;
+}
+
+main {
+    padding: 20px;
+}
+
+section#content {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+article {
+    background-color: #333;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+h2 {
+    font-size: 1.5em;
+    margin-top: 0;
+}
+
+p {
+    font-size: 1em;
+    line-height: 1.5;
+}
+
+button {
+    background-color: #ff2d55;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #ff5e7d;
+}
+
+footer {
+    background-color: #ff2d55;
+    text-align: center;
+    padding: 20px;
+}
+
+footer p {
+    margin: 0;
+}
+```
+
+This CSS provides a bold and vibrant look for your wiki website. Adjust the colors, fonts, and layout as needed to achieve the desired post-modern aesthetic.

@@ -1,0 +1,149 @@
+author: assistant
+conversation_id: 9055b292-d0dc-4cc1-88e8-c0569deb22e8
+message_id: 9273eafd-249f-4f0b-be06-4d92e6091721
+tags: chatgptmessage
+timestamp: 202406141518440000
+title: conv9055b292-d0dc-4cc1-88e8-c0569deb22e8_msg27_9273eafd-249f-4f0b-be06-4d92e6091721
+type: text/vnd.tiddlywiki
+
+Certainly! Here's the complete script `superpower_import.py` that processes a zip file containing JSON data and exports formatted tiddler data into a specified JSON file. The script handles timestamps formatted as `YYYYMMDDHHMMSSmmm` where milliseconds are included and considers timestamps in seconds since the UNIX epoch.
+
+```python
+import json
+import uuid
+import sys
+import os
+import zipfile
+from datetime import datetime
+
+def format_timestamp(unix_timestamp):
+    try:
+        if unix_timestamp is None:
+            return None
+        
+        # Convert milliseconds to seconds
+        unix_timestamp_seconds = unix_timestamp / 1000.0
+        # Convert Unix timestamp to datetime object
+        dt_object = datetime.utcfromtimestamp(unix_timestamp_seconds)
+        # Format the datetime object with milliseconds
+        formatted_timestamp = dt_object.strftime('%Y%m%d%H%M%S%f')[:-3]
+        return formatted_timestamp
+    except ValueError as e:
+        print(f"Error converting timestamp {unix_timestamp}: {e}")
+        return None
+
+def process_exported_json(data, filename):
+    tiddlers = []
+
+    conversation_id = str(uuid.uuid4())
+
+    conversation_tiddler = {
+        'title': conversation_id,
+        'tags': 'chatgptconversation',
+        'chatgptelement': 'conversation',
+        'conversation_title': data.get('title', filename)  # Use .get() for safer access
+    }
+    tiddlers.append(conversation_tiddler)
+
+    if 'mapping' in data and isinstance(data['mapping'], dict):
+        for i, (node_id, node_data) in enumerate(data['mapping'].items(), start=1):
+            if node_data and isinstance(node_data, dict):
+                if 'message' in node_data and node_data['message'] is not None and 'create_time' in node_data['message']:
+                    message = node_data['message']
+                    timestamp = message['create_time']
+                    formatted_timestamp = format_timestamp(timestamp)
+                    if formatted_timestamp is None:
+                        print(f"Invalid timestamp found in node_id {node_id} for file {filename}")
+                        continue  # Skip this message if timestamp cannot be formatted
+
+                    message_id = str(uuid.uuid4())
+                    title = f"conv{conversation_id}_msg{i}_{message_id}"
+
+                    tiddler = {
+                        'title': title,
+                        'text': message.get('content', {}).get('parts', [''])[0],
+                        'author': message.get('author', {}).get('role', 'unknown'),
+                        'conversation_id': conversation_id,
+                        'message_id': message_id,
+                        'tags': 'chatgptmessage',
+                        'timestamp': formatted_timestamp
+                    }
+                    tiddlers.append(tiddler)
+                else:
+                    print(f"Invalid message data found in node_id {node_id} for file {filename}")
+                    # Print node_data to inspect its contents
+                    print(f"Node data: {node_data}")
+            else:
+                print(f"Invalid node data found in node_id {node_id} for file {filename}")
+                # Print node_data to inspect its contents
+                print(f"Node data: {node_data}")
+    else:
+        print(f"No valid mapping data found in {filename}")
+
+    return tiddlers
+
+def process_zip_and_exported_json(zip_filepath, output_dir, output_file):
+    all_tiddlers = []  # Accumulate tiddlers from all files
+    with zipfile.ZipFile(zip_filepath, 'r') as zip_ref:
+        for filename in zip_ref.namelist():
+            if filename.endswith('.json'):
+                with zip_ref.open(filename) as json_file:
+                    try:
+                        data = json.load(json_file)
+                        tiddlers = process_exported_json(data, filename)
+                        all_tiddlers.extend(tiddlers)
+                    except json.JSONDecodeError as e:
+                        print(f"Error decoding JSON file {filename}: {e}")
+
+    # Write the combined output directly to the specified directory
+    output_filename = os.path.join(output_dir, output_file)
+    with open(output_filename, 'w', encoding='utf-8') as f:
+        json.dump(all_tiddlers, f, indent=4)
+
+if __name__ == "__main__":
+    if len(sys.argv) != 4:
+        print("Usage: python superpower_import.py <input_zip_file> <output_directory> <output_file>")
+        sys.exit(1)
+
+    zip_filepath = sys.argv[1]
+    output_dir = sys.argv[2]
+    output_file = sys.argv[3]
+
+    if not os.path.isfile(zip_filepath):
+        print(f"Error: Input zip file '{zip_filepath}' does not exist.")
+        sys.exit(1)
+
+    os.makedirs(output_dir, exist_ok=True)
+
+    process_zip_and_exported_json(zip_filepath, output_dir, output_file)
+```
+
+### Script Overview:
+
+1. **format_timestamp Function**:
+   - Converts UNIX timestamps (in milliseconds) to a formatted string `YYYYMMDDHHMMSSmmm` where milliseconds are included. It handles errors gracefully and returns `None` if the timestamp conversion fails.
+
+2. **process_exported_json Function**:
+   - Processes each JSON file extracted from the zip archive (`zip_filepath`).
+   - Extracts relevant data (conversation ID, message content, author, timestamp) and formats it into tiddler objects.
+   - Handles cases where data structure (`data['mapping']`) might be missing or invalid, logging appropriate error messages.
+
+3. **process_zip_and_exported_json Function**:
+   - Opens the specified zip file (`zip_filepath`) and iterates through each JSON file.
+   - Calls `process_exported_json` for each JSON file to extract tiddler data and accumulates them into `all_tiddlers`.
+   - Writes the combined tiddler data to a JSON file (`output_file`) in the specified output directory (`output_dir`).
+
+4. **Main Execution**:
+   - Checks command-line arguments to ensure the correct usage.
+   - Creates the output directory (`output_dir`) if it doesn't exist.
+   - Invokes `process_zip_and_exported_json` to process the zip file and export formatted tiddler data.
+
+### Usage:
+To run the script, execute it from the command line with three arguments: the path to the input zip file, the output directory where the result should be saved, and the name of the output JSON file.
+
+Example command:
+```
+python3 superpower_import.py 2024-06-14-conversations.zip /home/hamma/surp conv.json
+```
+
+This script will process the contents of `2024-06-14-conversations.zip`, extract the JSON files, format the tiddler data, and save the result as `conv.json` in `/home/hamma/surp` directory. Adjust paths and filenames according to your specific setup.

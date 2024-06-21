@@ -1,0 +1,42 @@
+author: user
+conversation_id: 3a982079-ab5f-472b-a65e-c7761e6a1a90
+message_id: 29ac77eb-8125-472c-beff-9494d4f59623
+tags: chatgptmessage
+timestamp: 202406031820130000
+title: conv3a982079-ab5f-472b-a65e-c7761e6a1a90_msg5_29ac77eb-8125-472c-beff-9494d4f59623
+type: text/vnd.tiddlywiki
+
+use this code "<p>Start typing to search for in message text (prompt or response)</p>
+<$edit-text tiddler="SearchFor" field="text"/><p/>
+<$vars searchfor=SearchFor>
+Found <$count filter="[tag[chatgptmessage]search:text<searchfor>sort[title]each[conversation_id]]"/>
+with ""
+<hr>
+<$list filter="[conversation-hub]search:text<searchfor>sort[title]each[conversation_id]">
+    <b><$view field="conversation_title"/></b>
+    <$link>Message</$link> 
+    <$link to=<<currentTiddler>>>Conversation</$link><hr>
+</$list>
+</$vars>" to search for conversation titles based on this template "<$list filter="[is[current]!conversation_id[]!date[]]"><!--to eliminate overlap with conversation-template-->
+Conversation: <br>
+Message: <br>
+Date: <$view field=date format=date template="DDth mmm YYYY 0hh:0mm:0ss" /><br>
+<hr>
+<$button>
+<$list filter="[conversation_id{!!conversation_id}nsort[date]first[]]">
+<$link to=<<currentTiddler>>>First</$link>
+</$list>
+</$button>
+
+
+<$button>Previous</$button>
+<$button>Next</$button>
+<$button>
+<$list filter="[conversation_id{!!conversation_id}nsort[date]last[]]">
+<$link to=<<currentTiddler>>>Last</$link>
+</$list>
+</$button>
+<hr>
+
+^^[[message-template]]^^
+</$list>"

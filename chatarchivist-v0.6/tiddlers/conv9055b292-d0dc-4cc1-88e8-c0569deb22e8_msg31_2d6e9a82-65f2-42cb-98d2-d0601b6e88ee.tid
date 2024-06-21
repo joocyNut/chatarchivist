@@ -1,0 +1,17 @@
+author: user
+conversation_id: 9055b292-d0dc-4cc1-88e8-c0569deb22e8
+message_id: 2d6e9a82-65f2-42cb-98d2-d0601b6e88ee
+tags: chatgptmessage
+timestamp: 202406141515530000
+title: conv9055b292-d0dc-4cc1-88e8-c0569deb22e8_msg31_2d6e9a82-65f2-42cb-98d2-d0601b6e88ee
+type: text/vnd.tiddlywiki
+
+hamma@AndrewsPC:~/surp$ python3 superpower_import.py 2024-06-14-conversations.zip /home/hamma/surp conv.json
+Traceback (most recent call last):
+  File "/home/hamma/surp/superpower_import.py", line 100, in <module>
+    process_zip_and_exported_json(zip_filepath, output_dir, output_file)
+  File "/home/hamma/surp/superpower_import.py", line 75, in process_zip_and_exported_json
+    tiddlers = process_exported_json(data, filename)
+  File "/home/hamma/surp/superpower_import.py", line 39, in process_exported_json
+    if 'message' in node_data and 'create_time' in node_data['message']:
+TypeError: argument of type 'NoneType' is not iterable

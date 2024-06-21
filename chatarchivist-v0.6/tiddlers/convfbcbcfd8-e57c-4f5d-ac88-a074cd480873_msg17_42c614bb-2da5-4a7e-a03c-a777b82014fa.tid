@@ -1,0 +1,14 @@
+author: user
+conversation_id: fbcbcfd8-e57c-4f5d-ac88-a074cd480873
+message_id: 42c614bb-2da5-4a7e-a03c-a777b82014fa
+tags: chatgptmessage
+timestamp: 202406141451260000
+title: convfbcbcfd8-e57c-4f5d-ac88-a074cd480873_msg17_42c614bb-2da5-4a7e-a03c-a777b82014fa
+type: text/vnd.tiddlywiki
+
+hamma@AndrewsPC:~/surp$ python3 openai_import.py 222c1974bdfdd43aa2a89a5f80e60401a7844dc11bda53286e99eba8a3b338c9-2024-06-13-20-01-17.zip /home/hamma/surp
+Warning: Invalid conversation format encountered: <class 'str'>
+Warning: Invalid conversation format encountered: <class 'str'>
+Warning: Invalid conversation format encountered: <class 'str'>
+Warning: Invalid conversation format encountered: <class 'str'>
+Conversations extracted and saved to /home/hamma/surp/all_conversations_tiddlywiki.json

@@ -1,0 +1,24 @@
+author: user
+conversation_id: 8b024954-fa38-4e90-8025-f7ad26cf5d23
+message_id: 4ba2b900-0733-4e7e-add9-89bd03276ea5
+tags: chatgptmessage
+timestamp: 202406051909580000
+title: conv8b024954-fa38-4e90-8025-f7ad26cf5d23_msg25_4ba2b900-0733-4e7e-add9-89bd03276ea5
+type: text/vnd.tiddlywiki
+
+why doesnt my chatgptconversation tiddler work with this template <$list filter="[is[current]tag[chatgptconversation]]">
+<$vars conversation=>
+<h2><<conversation>></h2>
+
+<$list filter="[conversation_id{!!title}sort[timestamp]]" counter="num">
+
+<$details summary= open="yes">
+<$text text=}/> <p class="text"><$transclude mode="block"/>
+<$macrocall $name="annotate" message-id=/></p>
+<hr>
+tokens: <$editor-counter field="text" mode=word/> || 
+<$link/><br>
+</$details>
+</$list>
+</$vars>
+</$list>

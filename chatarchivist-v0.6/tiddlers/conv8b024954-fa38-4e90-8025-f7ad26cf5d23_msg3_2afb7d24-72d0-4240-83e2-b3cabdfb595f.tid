@@ -1,0 +1,9 @@
+author: user
+conversation_id: 8b024954-fa38-4e90-8025-f7ad26cf5d23
+message_id: 2afb7d24-72d0-4240-83e2-b3cabdfb595f
+tags: chatgptmessage
+timestamp: 202406051856080000
+title: conv8b024954-fa38-4e90-8025-f7ad26cf5d23_msg3_2afb7d24-72d0-4240-83e2-b3cabdfb595f
+type: text/vnd.tiddlywiki
+
+i want conversation_id to look similar to this "003542b7-2cf9-4606-8e06-30ff7115f69a", message_id should look similar to this "9f6afe3-569b-4223-8487-880077bbc3de", timestamp should look similar to this "20230921233240180", and title should look similar to this "conv403_msg2_19f6afe3-569b-4223-8487-880077bbc3de"

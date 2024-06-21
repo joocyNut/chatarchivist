@@ -1,0 +1,155 @@
+author: user
+conversation_id: 3a982079-ab5f-472b-a65e-c7761e6a1a90
+message_id: 6dd45bc3-82f0-4d9e-8818-fda837066199
+tags: chatgptmessage
+timestamp: 202406031812520000
+title: conv3a982079-ab5f-472b-a65e-c7761e6a1a90_msg12_6dd45bc3-82f0-4d9e-8818-fda837066199
+type: text/vnd.tiddlywiki
+
+"\define annotation-tiddler() Annotation-$(tiddler-title)$
+\define annotation-header-text() $(conversation_title)$ message $(conversation_index)$
+
+
+<div class="hub">
+
+<$list filter="[is[current]chatarchivist[conversation-hub]]">
+<$vars conversation_index= first="1" conversation_title= tiddler-title= >
+<$set name="previous" filter="[<conversation_index>subtract[1]]">
+<$set name="next" filter="[<conversation_index>add[1]]">
+<$set name="last" filter="[file_hash{!!file_hash}chatarchivist[]count[]]">
+
+
+
+<div class="tc-tiddler-title">
+<div class="tc-titlebar">
+
+<div class="conversation-title">
+
+</div>
+</div>
+</div>
+
+
+
+
+<div class="conversation-navigation">
+Select message # to show <$button>First (#<<first>>)
+<$action-setfield $tiddler= conversation_index=1/>
+<$action-navigate $to=/>
+</$button>
+<$button>Previous (#<<previous>>)
+<$action-setfield $tiddler= conversation_index=<<previous>>/>
+<$action-navigate $to=/>
+</$button>
+Message #<<conversation_index>> of <<last>>
+<$button>Next (# <<next>>)
+<$action-setfield $tiddler= conversation_index=<<next>>/>
+<$action-navigate $to=/>
+</$button>
+<$button>Last (#<<last>>)
+<$action-setfield $tiddler= conversation_index=<<last>>/>
+<$action-navigate $to=/>
+</$button>
+</div>
+
+
+
+
+<$list filter="[file_hash{!!file_hash}chatarchivist[]nsort[date]nth{!!conversation_index}]">
+<$vars tiddler-title=>
+
+<div class="message-in-conversation-header">
+<$link/><br>
+
+'''' generated <$view field=date format=date template="0DD mmm YYYY 0hh:0mm:0ss" /><br>
+</div>
+
+<div class="associating image with message">
+<$details summary="associate an image with this message">
+
+<$macrocall $name='image-picker' actions="
+<$action-setfield $tiddler='$:/_MyImage' $value=<<imageTitle>>/>
+" subfilter="suffix[webp]"/>
+
+<$image source= width="100"/>
+<br>
+<$button> Add  to 
+<$action-setfield $tiddler= message= chatarchivist="added-image"/>
+</$button>
+
+</$details>
+</div>
+
+
+
+<div class="picture in message">
+<$list filter="[chatarchivist[added-image]message{!!title}]">
+<<currentTiddler>><br>
+<$image source=<<currentTiddler>> width="100"/>
+<$button> Remove  from <<currentTiddler>> 
+<$action-setfield  message="" chatarchivist=""/>
+</$button>
+</$list>
+</div>
+
+<div class="message-in-conversation-text">
+<$transclude mode="block"/>
+</div>
+
+
+
+
+
+<div class="conversation-navigation">
+Select message # to show <$button>First (#<<first>>)
+<$action-setfield $tiddler= conversation_index=1/>
+<$action-navigate $to=/>
+</$button>
+<$button>Previous (#<<previous>>)
+<$action-setfield $tiddler= conversation_index=<<previous>>/>
+<$action-navigate $to=/>
+</$button>
+Message #<<conversation_index>> of <<last>>
+<$button>Next (# <<next>>)
+<$action-setfield $tiddler= conversation_index=<<next>>/>
+<$action-navigate $to=/>
+</$button>
+<$button>Last (#<<last>>)
+<$action-setfield $tiddler= conversation_index=<<last>>/>
+<$action-navigate $to=/>
+</$button>
+</div>
+
+</$vars>
+</$list>
+<hr>
+
+
+</$set></$set></$set>
+</$vars>
+
+^^[[superpower chatgpt archive]] ~ [[$:/plugins/chatarchivist/templates/conversation-adding-images]]^^
+</$list>
+</div>" "<$list filter="[is[current]!conversation_id[]!date[]]"><!--to eliminate overlap with conversation-template-->
+Conversation: <br>
+Message: <br>
+Date: <$view field=date format=date template="DDth mmm YYYY 0hh:0mm:0ss" /><br>
+<hr>
+<$button>
+<$list filter="[conversation_id{!!conversation_id}nsort[date]first[]]">
+<$link to=<<currentTiddler>>>First</$link>
+</$list>
+</$button>
+
+
+<$button>Previous</$button>
+<$button>Next</$button>
+<$button>
+<$list filter="[conversation_id{!!conversation_id}nsort[date]last[]]">
+<$link to=<<currentTiddler>>>Last</$link>
+</$list>
+</$button>
+<hr>
+
+^^[[message-template]]^^
+</$list>" using these two templates, build a search function using a new tiddler that sorts based on conversation title

@@ -1,0 +1,77 @@
+author: assistant
+conversation_id: f136806d-6a66-42c8-bdbf-aef4ace67458
+message_id: 02548a9d-7829-4963-9727-a90a9f476147
+tags: chatgptmessage
+timestamp: 202406051920520000
+title: convf136806d-6a66-42c8-bdbf-aef4ace67458_msg22_02548a9d-7829-4963-9727-a90a9f476147
+type: text/vnd.tiddlywiki
+
+To adjust the format of `conversation_id` and `message_id`, we can modify the generation process to adhere to the required format. Here's the updated script:
+
+```python
+import json
+import uuid
+import sys
+import os
+
+def process_exported_json(input_file, output_dir):
+    with open(input_file, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+
+    tiddlers = []
+
+    # Create a tiddler representing the conversation
+    conversation_id = str(uuid.uuid4())  # Generate conversation ID
+    conversation_id = conversation_id[:8] + '-' + conversation_id[8:12] + '-' + conversation_id[12:16] + '-' + conversation_id[16:20] + '-' + conversation_id[20:]
+    conversation_tiddler = {
+        'title': data['id'],
+        'tags': 'chatgptconversation',
+        'chatgptelement': 'conversation',
+        'conversation_title': data['title'],
+        'conversation_id': conversation_id  # Assign conversation ID
+    }
+    tiddlers.append(conversation_tiddler)
+
+    for node_id, node_data in data['mapping'].items():
+        message = node_data['message']
+        if message and message['create_time'] is not None:
+            message_id = str(uuid.uuid4())  # Generate message ID
+            message_id = message_id[:8] + '-' + message_id[8:12] + '-' + message_id[12:16] + '-' + message_id[16:20] + '-' + message_id[20:]
+            timestamp = str(int(message['create_time'] * 1000))  # Convert to milliseconds
+            title = f"conv{conversation_id}_msg{message['id']}_{message_id}"
+
+            tiddler = {
+                'title': title,
+                'text': message['content']['parts'][0],
+                'author': message['author']['role'],
+                'conversation_id': conversation_id,  # Use the same conversation ID
+                'message_id': message_id,
+                'tags': 'chatgptmessage',
+                'timestamp': timestamp
+            }
+            tiddlers.append(tiddler)
+
+    output_filename = os.path.join(output_dir, 'processed_data.json')
+    with open(output_filename, 'w', encoding='utf-8') as f:
+        json.dump(tiddlers, f, indent=4)
+
+if __name__ == "__main__":
+    if len(sys.argv) != 3:
+        print("Usage: python import_json.py <input_json_file> <output_directory>")
+        sys.exit(1)
+
+    input_file = sys.argv[1]
+    output_dir = sys.argv[2]
+
+    if not os.path.isfile(input_file):
+        print(f"Error: Input file '{input_file}' does not exist.")
+        sys.exit(1)
+
+    if not os.path.isdir(output_dir):
+        print(f"Error: Output directory '{output_dir}' does not exist.")
+        sys.exit(1)
+
+    process_exported_json(input_file, output_dir)
+```
+
+This script will generate `conversation_id` and `message_id` with the specified format.

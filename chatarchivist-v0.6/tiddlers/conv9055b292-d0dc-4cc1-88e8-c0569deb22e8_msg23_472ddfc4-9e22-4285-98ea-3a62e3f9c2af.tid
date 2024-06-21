@@ -1,0 +1,20 @@
+author: user
+conversation_id: 9055b292-d0dc-4cc1-88e8-c0569deb22e8
+message_id: 472ddfc4-9e22-4285-98ea-3a62e3f9c2af
+tags: chatgptmessage
+timestamp: 202406141513580000
+title: conv9055b292-d0dc-4cc1-88e8-c0569deb22e8_msg23_472ddfc4-9e22-4285-98ea-3a62e3f9c2af
+type: text/vnd.tiddlywiki
+
+hamma@AndrewsPC:~/surp$ python3 superpower_import.py 2024-06-14-conversations.zip /home/hamma/surp conv.json
+Invalid message data found in node_id 0acff3fb-d890-4bcd-acce-80140cdbe2c3 for file 2024-6-14/10-39-53-Model_Training_Instructions.json
+Traceback (most recent call last):
+  File "/home/hamma/surp/superpower_import.py", line 93, in <module>
+    process_zip_and_exported_json(zip_filepath, output_dir, output_file)
+  File "/home/hamma/surp/superpower_import.py", line 68, in process_zip_and_exported_json
+    tiddlers = process_exported_json(data, filename)
+  File "/home/hamma/surp/superpower_import.py", line 38, in process_exported_json
+    formatted_timestamp = format_timestamp(timestamp)
+  File "/home/hamma/surp/superpower_import.py", line 11, in format_timestamp
+    unix_timestamp_seconds = unix_timestamp / 1000.0
+TypeError: unsupported operand type(s) for /: 'NoneType' and 'float'

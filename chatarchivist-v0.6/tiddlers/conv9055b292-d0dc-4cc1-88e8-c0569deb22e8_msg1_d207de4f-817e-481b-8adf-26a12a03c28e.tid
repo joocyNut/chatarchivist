@@ -1,0 +1,9 @@
+author: user
+conversation_id: 9055b292-d0dc-4cc1-88e8-c0569deb22e8
+message_id: d207de4f-817e-481b-8adf-26a12a03c28e
+tags: chatgptmessage
+timestamp: 202406141512450000
+title: conv9055b292-d0dc-4cc1-88e8-c0569deb22e8_msg1_d207de4f-817e-481b-8adf-26a12a03c28e
+type: text/vnd.tiddlywiki
+
+the timestamp should also be considered in seconds since the UNIX epoch

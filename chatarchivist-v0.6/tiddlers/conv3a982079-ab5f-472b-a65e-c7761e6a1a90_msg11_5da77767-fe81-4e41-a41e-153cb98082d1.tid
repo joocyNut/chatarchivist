@@ -1,0 +1,57 @@
+author: assistant
+conversation_id: 3a982079-ab5f-472b-a65e-c7761e6a1a90
+message_id: 5da77767-fe81-4e41-a41e-153cb98082d1
+tags: chatgptmessage
+timestamp: 202406031812580000
+title: conv3a982079-ab5f-472b-a65e-c7761e6a1a90_msg11_5da77767-fe81-4e41-a41e-153cb98082d1
+type: text/vnd.tiddlywiki
+
+To create a search function based on conversation title using the provided templates, you can follow these steps:
+
+1. Create a new tiddler named "Search by Conversation Title" or any suitable name.
+2. In this new tiddler, define the search interface where users can input the conversation title they want to search for.
+3. Use a `$list` widget to filter conversations based on the input title.
+4. Display the search results using the conversation template.
+
+Here's how you can implement it:
+
+```html
+\define search-by-title()
+<div class="search-form">
+    <form>
+        <label for="conversation-title">Search by Conversation Title:</label><br>
+        <input type="text" id="conversation-title" name="conversation-title"><br><br>
+        <input type="button" value="Search" onclick="searchByTitle()">
+    </form>
+</div>
+
+<script>
+function searchByTitle() {
+    var title = document.getElementById("conversation-title").value;
+    // Redirect to search result tiddler with title parameter
+    window.location.href = "#SearchResults_" + title;
+}
+</script>
+
+\end
+
+\define search-results()
+<div class="search-results">
+    <$list filter="[is[current]conversation-hub]">
+        <$list filter="[title[SearchResults_$:/temp/conversation-title]]">
+            <$list filter="[conversation_title{!!conversation_title}]">
+                <<annotation-tiddler>> <!-- Include annotation -->
+                <<annotation-header-text>> <!-- Include header text -->
+                <!-- Include conversation navigation buttons -->
+                <!-- Include conversation messages -->
+            </$list>
+        </$list>
+    </$list>
+</div>
+\end
+
+<<search-by-title>>
+<<search-results>>
+```
+
+With this setup, users can enter a conversation title in the search form. When they click the "Search" button, it triggers the `searchByTitle()` JavaScript function, which redirects to a new tiddler titled "SearchResults_ConversationTitle" (e.g., "SearchResults_MyConversation"). In this new tiddler, the search results will be displayed based on the entered conversation title.

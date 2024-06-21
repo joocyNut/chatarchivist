@@ -1,0 +1,9 @@
+author: user
+conversation_id: 8b024954-fa38-4e90-8025-f7ad26cf5d23
+message_id: c1cef7a4-e4b2-4e75-a0e4-daa8c2f19ed2
+tags: chatgptmessage
+timestamp: 202406051847300000
+title: conv8b024954-fa38-4e90-8025-f7ad26cf5d23_msg21_c1cef7a4-e4b2-4e75-a0e4-daa8c2f19ed2
+type: text/vnd.tiddlywiki
+
+write a python script that takes a chatgpt export json and makes each message have an author field with either a user or assistant value, the same conversation_id field, a unique message_id field, a tags field with the value chatgptmessage, a timestamp field, and a title field that has a value that looks like this conv403_msg2_19f6afe3-569b-4223-8487-880077bbc3de

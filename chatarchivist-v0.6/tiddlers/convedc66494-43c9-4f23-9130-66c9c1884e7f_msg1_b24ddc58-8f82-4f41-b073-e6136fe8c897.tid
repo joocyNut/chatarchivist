@@ -1,0 +1,88 @@
+author: assistant
+conversation_id: edc66494-43c9-4f23-9130-66c9c1884e7f
+message_id: b24ddc58-8f82-4f41-b073-e6136fe8c897
+tags: chatgptmessage
+timestamp: 202405301734290000
+title: convedc66494-43c9-4f23-9130-66c9c1884e7f_msg1_b24ddc58-8f82-4f41-b073-e6136fe8c897
+type: text/vnd.tiddlywiki
+
+Of course! Post-modern design often incorporates bold elements, but it doesn't have to be overwhelming or hard on the eyes. Let's tone down the colors and focus on creating a balanced and visually appealing design:
+
+```css
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #333;
+    padding: 20px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 2.5em;
+    margin: 0;
+    color: #fff;
+}
+
+main {
+    padding: 20px;
+}
+
+section#content {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+article {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    font-size: 1.5em;
+    margin-top: 0;
+    color: #333;
+}
+
+p {
+    font-size: 1em;
+    line-height: 1.5;
+    color: #555;
+}
+
+button {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #555;
+}
+
+footer {
+    background-color: #333;
+    text-align: center;
+    padding: 20px;
+}
+
+footer p {
+    margin: 0;
+    color: #fff;
+}
+```
+
+This CSS maintains the structure and layout while using softer colors and subtle contrasts to create a more visually pleasing experience for your wiki website. Feel free to adjust the colors and styles further to suit your preferences!

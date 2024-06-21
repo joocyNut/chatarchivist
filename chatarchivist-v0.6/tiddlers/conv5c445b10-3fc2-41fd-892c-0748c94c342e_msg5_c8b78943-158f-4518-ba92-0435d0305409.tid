@@ -1,0 +1,81 @@
+author: user
+conversation_id: 5c445b10-3fc2-41fd-892c-0748c94c342e
+message_id: c8b78943-158f-4518-ba92-0435d0305409
+tags: chatgptmessage
+timestamp: 202406181601160000
+title: conv5c445b10-3fc2-41fd-892c-0748c94c342e_msg5_c8b78943-158f-4518-ba92-0435d0305409
+type: text/vnd.tiddlywiki
+
+<$list filter="[is[current]tag[chatgptconversation]]">
+<$vars conversation= conversation_index="1">
+
+<div class="conversation-title">
+<h1></h1>
+</div>
+ 
+<$macrocall $name="exportButton" 
+            exportFilter=<<currentTiddler>>
+            lingoBase="$:/language/Buttons/ExportTiddler/" 
+            baseFilename=<<currentTiddler>>/>
+
+<$list filter="[conversation_id{!!title}sort[timestamp]]" counter="num">
+
+<$details summary= open="yes">
+
+<div class="message_block">
+<$transclude mode="block"/>
+</div>
+
+<$list filter="[is[current]!favorite[true]]">
+<$button class="tc-btn-invisible" tooltip="Unfavorite this message">
+
+<$action-setfield $tiddler=<<currentTiddler>> favorite="true"/>
+</$button>
+</$list>
+
+<$list filter="[is[current]favorite[true]]">
+<$button class="tc-btn-invisible" tooltip="Unfavorite this message">
+
+<$action-setfield $tiddler=<<currentTiddler>> favorite="false"/>
+</$button>
+</$list>
+
+<div class="annotation_button">
+<$macrocall $name="annotate" message-id=/>
+
+<hr>
+<i>Generated <$text text=}/></i><br>
+Tokens: <$editor-counter field="text" mode=word/> || 
+<$link/><br>
+
+<$list filter="[timestamp{!!timestamp}chatgptelement[]nsort[timestamp]nth{!!title}]">
+<$vars tiddler-title=>
+
+<div class="associating image with message">
+<$details summary="Associate an image with this message">
+
+<$macrocall $name='image-picker' actions="
+<$action-setfield $tiddler='$:/_MyImage' $value=<<imageTitle>>/>"/>
+
+<$image source= width="100"/>
+<br>
+<$button> Add  to this <$link to=>prompt</$link>
+<$action-setfield $tiddler= message= chatgptelement="added-image"/>
+</$button>
+
+</$details>
+</div>
+
+<div class="picture in message">
+<$list filter="[chatgptelement[added-image]message{!!title}]">
+<div>
+<$image source=<<currentTiddler>> width="100"/>
+<br> <$button> Remove this <$link to=<<currentTiddler>>>image</$link> from this 
+<$link to=<<tiddler-title>>>prompt</$link>
+<$action-setfield message="" chatgptelement=""/>
+</$button>
+</div>
+</$list>
+</div>
+</$vars>
+</$list> why are chatgptmessages being sorted by favorited or unfavorited

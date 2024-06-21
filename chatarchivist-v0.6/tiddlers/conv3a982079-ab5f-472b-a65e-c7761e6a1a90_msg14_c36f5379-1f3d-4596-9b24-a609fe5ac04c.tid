@@ -1,0 +1,26 @@
+author: assistant
+conversation_id: 3a982079-ab5f-472b-a65e-c7761e6a1a90
+message_id: c36f5379-1f3d-4596-9b24-a609fe5ac04c
+tags: chatgptmessage
+timestamp: 202406031817500000
+title: conv3a982079-ab5f-472b-a65e-c7761e6a1a90_msg14_c36f5379-1f3d-4596-9b24-a609fe5ac04c
+type: text/vnd.tiddlywiki
+
+I apologize for the oversight. Let's ensure the substitution of the variable is done correctly. Instead of using `<$text text=SearchFor$>`, we can directly embed the variable within the text string. Here's the corrected version:
+
+```html
+<p>Start typing to search for in message text (prompt or response)</p>
+<$edit-text tiddler="SearchFor" field="text"/><p/>
+<$vars searchfor=SearchFor>
+Found <$count filter="[conversation-hub]search:text<searchfor>sort[title]each[conversation_id]"/>
+with "<<searchfor>>"
+<hr>
+<$list filter="[conversation-hub]search:text<searchfor>sort[title]each[conversation_id]">
+    <b><$view field="conversation_title"/></b>
+    <$link>Message</$link> 
+    <$link to=<<currentTiddler>>>Conversation</$link><hr>
+</$list>
+</$vars>
+```
+
+This change should properly substitute the value of the `SearchFor` variable within the text string, ensuring that it displays the correct count and the searched text.

@@ -1,0 +1,29 @@
+chatarchivist: stylesheets
+created: 20240315235302474
+modified: 20240328175746714
+tags: $:/tags/Stylesheet
+title: $:/plugins/chatarchivist/stylesheets/chatarchivist
+
+.hub {
+        background-color:  #fff;
+    }
+.conversation-title {
+        background-color: #fff;
+        font-weight: bold;
+        font-size:x-500%;
+    }
+.conversation-navigation {
+    	background-color: #fff;
+        font-size:100%;
+    }
+.message-in-conversation-header {
+        background-color: #fff;
+        font-weight: bold;
+        font-size: 75%;
+    }
+.message-annotation {
+        background-color: #fff;
+    }
+.message-in-conversation-text {
+        background-color: #FFFFFF;
+    }

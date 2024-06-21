@@ -1,0 +1,23 @@
+created: 20240603175730044
+modified: 20240620171857412
+tags: 
+title: Search Code
+type: text/vnd.tiddlywiki
+
+<p>Start typing to search for in conversation titles</p>
+<div class="search-box">
+<$edit-text tiddler="SearchFor" field="text"/>
+</div>
+<$vars searchfor={{SearchFor!!text}}><br>
+Found <$count filter="[tag[chatgptconversation]search:conversation_title<searchfor>sort[title]]"/> conversations
+with "{{SearchFor!!text}}"
+<hr>
+<div class="scrollable-box">
+<$list filter="[tag[chatgptconversation]search:conversation_title<searchfor>sort[title]]">
+<$button class="tc-btn-invisible  tc-tiddlylink">
+<$view field="conversation_title"/>
+<$action-navigate $to={{!!title}}/>
+<$action-setfield $tiddler="transcludeMessage" id={{!!title}} conversation_index="1"/>
+</$button>
+<hr>
+<div class="scrollable-box">

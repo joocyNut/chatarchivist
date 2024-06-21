@@ -1,0 +1,17 @@
+author: user
+conversation_id: 9595600a-f9cc-4ae0-9747-4bdf4aa204b3
+message_id: 3918e5e4-7769-4dc6-8c2d-3b42d4e03571
+tags: chatgptmessage
+timestamp: 202406101513190000
+title: conv9595600a-f9cc-4ae0-9747-4bdf4aa204b3_msg4_3918e5e4-7769-4dc6-8c2d-3b42d4e03571
+type: text/vnd.tiddlywiki
+
+hamma@AndrewsPC:~/surp$ python3 openai_import.py /home/hamma/surp/222c1974bdfdd43aa2a89a5f80e60401a7844dc11bda53286e99eba8a3b338c9-2024-06-10-14-55-56.zip /home/hamma/surp
+Traceback (most recent call last):
+  File "/home/hamma/surp/openai_import.py", line 68, in <module>
+    output_file_path = extract_and_convert_conversations(zip_file_path, output_dir)
+  File "/home/hamma/surp/openai_import.py", line 54, in extract_and_convert_conversations
+    all_tiddlers.extend(process_conversation_file(json_content, conversation_id))
+  File "/home/hamma/surp/openai_import.py", line 19, in process_conversation_file
+    for message_key, message_value in json_content.get('mapping', {}).items():
+AttributeError: 'list' object has no attribute 'get'

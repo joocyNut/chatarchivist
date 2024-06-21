@@ -1,0 +1,125 @@
+author: assistant
+conversation_id: 80de3e47-0f2a-4053-b6ee-83a6b6e7cf8d
+message_id: 8ba67573-56c3-4900-b021-9780677da360
+tags: chatgptmessage
+timestamp: 202406141524570000
+title: conv80de3e47-0f2a-4053-b6ee-83a6b6e7cf8d_msg17_8ba67573-56c3-4900-b021-9780677da360
+type: text/vnd.tiddlywiki
+
+The error message `ValueError: year 56423 is out of range` indicates that the `epoch_time` value passed to `datetime.fromtimestamp(epoch_time, timezone.utc)` is extremely large or small, causing it to fall outside the range of years that Python's `datetime` module can handle.
+
+Given this error, it's likely that the `epoch_time` values you're processing are incorrect or corrupted in some way. Here are a few steps to diagnose and potentially resolve this issue:
+
+1. **Verify Timestamps**: Double-check the timestamps (`epoch_time`) in your JSON data (`conversations.json` within `2024-06-14-conversations.zip`). Ensure they are indeed in seconds since the UNIX epoch and are reasonable values (not excessively large or negative).
+
+2. **Handle Edge Cases**: Implement additional checks in your code to handle edge cases where timestamps might be out of range. For example, you can add checks to skip processing if a timestamp is negative or too large to be valid.
+
+3. **Error Handling**: Improve error handling to print more informative messages or log details when such errors occur, including the specific filename and timestamp causing the issue.
+
+Let's adjust your script to include a range check for timestamps and improve error handling:
+
+```python
+import json
+import os
+from zipfile import ZipFile
+from datetime import datetime, timezone
+import sys
+import uuid
+
+def format_tiddlywiki_date(epoch_time):
+    '''Convert epoch time to TiddlyWiki date format YYYYMMDDhhmmssss, using timezone-aware datetime.'''
+    try:
+        return datetime.fromtimestamp(epoch_time, timezone.utc).strftime('%Y%m%d%H%M%S0000')
+    except ValueError as e:
+        print(f"Error converting timestamp {epoch_time}: {e}")
+        return None
+
+def process_exported_json(data, filename):
+    tiddlers = []
+
+    conversation_id = str(uuid.uuid4())
+
+    conversation_tiddler = {
+        'title': conversation_id,
+        'tags': 'chatgptconversation',
+        'chatgptelement': 'conversation',
+        'conversation_title': data.get('title', 'UnknownTitle')
+    }
+    tiddlers.append(conversation_tiddler)
+
+    for i, (node_id, node_data) in enumerate(data.get('mapping', {}).items(), start=1):
+        message = node_data.get('message', {})
+        if message and message.get('create_time') is not None:
+            message_id = str(uuid.uuid4())
+            timestamp = message['create_time']
+            
+            # Check if the timestamp is within a reasonable range
+            if timestamp < 0 or timestamp > 2**31 - 1:  # Assuming 32-bit signed Unix timestamp
+                print(f"Invalid timestamp {timestamp} found in {filename}. Skipping.")
+                continue
+            
+            formatted_timestamp = format_tiddlywiki_date(timestamp)
+            if formatted_timestamp is None:
+                continue  # Skip this message if timestamp conversion fails
+            
+            title = f"conv{conversation_id}_msg{i}_{message_id}"
+
+            tiddler = {
+                'title': title,
+                'text': message.get('content', {}).get('parts', [''])[0],
+                'author': message.get('author', {}).get('role', 'unknown'),
+                'conversation_id': conversation_id,
+                'message_id': message_id,
+                'tags': 'chatgptmessage',
+                'timestamp': formatted_timestamp
+            }
+            tiddlers.append(tiddler)
+    
+    return tiddlers
+
+def process_zip_and_exported_json(zip_filepath, output_dir):
+    all_tiddlers = []  # Accumulate tiddlers from all files
+    with ZipFile(zip_filepath, 'r') as zip_ref:
+        for filename in zip_ref.namelist():
+            if filename.endswith('.json'):
+                with zip_ref.open(filename) as json_file:
+                    try:
+                        data = json.load(json_file)
+                        tiddlers = process_exported_json(data, filename)
+                        all_tiddlers.extend(tiddlers)
+                    except json.JSONDecodeError as e:
+                        print(f"Error loading JSON from {filename}: {e}")
+                        continue  # Skip this file if JSON decoding fails
+
+    # Write the combined output directly to the specified directory
+    output_filename = os.path.join(output_dir, 'all_conversations_tiddlywiki.json')
+    with open(output_filename, 'w', encoding='utf-8') as f:
+        json.dump(all_tiddlers, f, indent=4)
+
+    return output_filename
+
+if __name__ == '__main__':
+    if len(sys.argv) != 3:
+        print("Usage: python script.py <path_to_zip_file> <output_directory>")
+        sys.exit(1)
+
+    zip_filepath = sys.argv[1]
+    output_dir = sys.argv[2]
+    
+    if not os.path.isfile(zip_filepath):
+        print(f"Error: Input zip file '{zip_filepath}' does not exist.")
+        sys.exit(1)
+
+    os.makedirs(output_dir, exist_ok=True)
+
+    output_file_path = process_zip_and_exported_json(zip_filepath, output_dir)
+    print(f'Conversations extracted and saved to {output_file_path}')
+```
+
+### Changes Made:
+
+- **Timestamp Range Check**: Added a check in `process_exported_json` to validate if the `timestamp` falls within a reasonable range (`timestamp < 0 or timestamp > 2**31 - 1`). Adjust this range based on your specific data constraints.
+  
+- **Error Handling in `format_tiddlywiki_date`**: Modified `format_tiddlywiki_date` function to catch `ValueError` exceptions that might arise from invalid timestamps and print a more informative error message.
+
+These adjustments should help in handling invalid timestamp errors more gracefully and provide more detailed information about the cause of the issue. Adjust the range check and error handling further based on the characteristics of your actual data and specific requirements.

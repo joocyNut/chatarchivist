@@ -1,0 +1,9 @@
+author: user
+conversation_id: 853ae96e-2dec-4c40-be9b-716606019d4e
+message_id: 500415b4-2511-43ac-b9bc-581c18ff5055
+tags: chatgptmessage
+timestamp: 202406101449040000
+title: conv853ae96e-2dec-4c40-be9b-716606019d4e_msg20_500415b4-2511-43ac-b9bc-581c18ff5055
+type: text/vnd.tiddlywiki
+
+i want the script to turn this "1717438589.808519" into something that can be formatted like this DDth mmm YYYY 0hh:0mm:0ss on tiddlywiki. Ex.) 21st Sep 2023 19:32:32

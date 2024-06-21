@@ -1,0 +1,74 @@
+author: user
+conversation_id: 95ec3e3a-537d-4902-87ec-151823ded654
+message_id: 61145520-d44f-48b6-9c8a-a17406bf9b27
+tags: chatgptmessage
+timestamp: 202405311559140000
+title: conv95ec3e3a-537d-4902-87ec-151823ded654_msg7_61145520-d44f-48b6-9c8a-a17406bf9b27
+type: text/vnd.tiddlywiki
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatArchivist</title>
+    <style>
+        body {
+            font-family: sans-serif; 
+            line-height: 1.6;       
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1, h2 {
+            text-align: center;    
+        }
+
+        #bio {
+            text-align: center;
+            max-width: 600px;      
+            margin: 20px auto;    
+        }
+        
+        #links-container { /* Added container for links */
+            display: flex;
+            flex-direction: column; /* Make links vertical */
+            align-items: center;   /* Center links horizontally */
+        }
+
+        a { 
+            display: block;         /* Take up full width of container */
+            width: 200px;          /* Set a fixed width for better visual consistency */
+            padding: 15px;        
+            background-color: #f5f5f5;
+            text-decoration: none; 
+            color: #333;           
+            border-radius: 5px;     
+            margin-bottom: 10px;   
+            transition: background-color 0.3s;
+            text-align: center;    /* Center text within links */
+        }
+
+        a:hover {
+            background-color: #e0e0e0; 
+        }
+    </style>
+</head>
+<body>
+    <h1>ChatArchivist</h1>
+
+    <p id="bio">ChatArchivist is your personal AI chat history hub. We securely store and organize your conversations, allowing you to revisit, learn from, and gain insights from your past interactions.</p>
+
+    <h2>View Archived Chats</h2>
+    <div id="links-container">
+        <a href="https://sunypoly-ai-studio.github.io/chatarchivist/chatgpt-conversations.html">ChatArchivist-v0.1</a>
+        <a href="https://sunypoly-ai-studio.github.io/chatarchivist/chatgpt-conversations-v0dot2.html">ChatArchivist-v0.2</a>
+        <a href="https://sunypoly-ai-studio.github.io/chatarchivist/superpower-chatgpt-archivist.html">ChatArchivist-Superpower</a>
+        <a href="https://sunypoly-ai-studio.github.io/chatarchivist/chatarchivist-zero-dot-3.html">ChatArchivist-Superpower-v2.0</a>
+    </div>
+    <h2>Sprint Calendar</h2>
+    <div id="links-container">
+        <a href="https://sunypoly-ai-studio.github.io/chatarchivist/sprint-calendar/2-week-sprint-may31-june14.html">May 31st - June 14th</a>
+    </div>
+</body>
+</html> make these two divs next to each other

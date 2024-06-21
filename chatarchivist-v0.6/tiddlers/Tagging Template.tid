@@ -1,0 +1,47 @@
+Annotation: on
+created: 20240611151652646
+modified: 20240620151240094
+tags: 
+title: Tagging Template
+
+!!Template Selection
+
+Which template would you like to use? Dropdown Template puts all messages in a single area with the ability to open and close individual messages, and Button Template allows you to view the messages individually using buttons for navigation.
+
+<$select tiddler="whichTemplate">
+<$list filter='[tag[chatarchivist-template]!title[transcludeMessage]]'>
+<option><$view field='title'/></option>
+</$list>
+</$select>
+
+
+Click button to set template
+
+<div class="navigation_button">
+<$button>
+Use {{whichTemplate}}
+
+<!--remove $/tags/ViewTemplate-->
+<$list filter="[tag[chatarchivist-template]]">
+<$action-setfield tags="chatarchivist-template" Annotation="off"/>
+
+</$list>
+<!--add $/tags/ViewTemplate-->
+<$list filter="[title{whichTemplate}]">
+<$action-setfield tags="$:/tags/ViewTemplate chatarchivist-template currentTemplate" Annotation={{!!Annotation}}/>
+<$list filter="[title{whichTemplate} field:Template[2]]">
+<$action-setfield $tiddler="transcludeMessage" tags="chatarchivist-template currentTemplate" Annotation={{!!Annotation}}/>
+<$list filter="[tag[chatgptconversation]]">
+<$action-setfield $tiddler=<<currentTiddler>> conversation_index="1"/>
+</$list>
+</$list>
+</$list>
+</$button>
+</div>
+
+You are currently using
+<$list filter="[tag[$:/tags/ViewTemplate]tag[currentTemplate]]"><$link/><br></$list><br><hr>
+
+
+
+

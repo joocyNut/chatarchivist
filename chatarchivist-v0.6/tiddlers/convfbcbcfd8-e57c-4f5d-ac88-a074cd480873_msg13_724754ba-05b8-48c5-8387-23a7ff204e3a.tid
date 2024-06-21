@@ -1,0 +1,9 @@
+author: user
+conversation_id: fbcbcfd8-e57c-4f5d-ac88-a074cd480873
+message_id: 724754ba-05b8-48c5-8387-23a7ff204e3a
+tags: chatgptmessage
+timestamp: 202406141445170000
+title: convfbcbcfd8-e57c-4f5d-ac88-a074cd480873_msg13_724754ba-05b8-48c5-8387-23a7ff204e3a
+type: text/vnd.tiddlywiki
+
+i want one chatgptconversation tiddler for every unique conversation, so one chatgptconversation tiddler per bunch of tiddlers with the same conversation_id

@@ -1,0 +1,9 @@
+chatarchivist: documentation
+created: 20240306144712563
+modified: 20240329183445336
+title: $:/plugins/chatarchivist/documentation/next-steps
+
+# Improve search by [[finding and testing search plugins for tiddlywiki|https://www.google.com/search?q=tiddlywiki+plugin+search&oq=tiddlywiki+plugin+search&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIHCAEQIRigATIHCAIQIRigATIHCAMQIRifBdIBCDUwNTNqMGo3qAIAsAIA&sourceid=chrome&ie=UTF-8]]
+# Develop and offer alternative templates / editions / CSS / UI for different tasks, such as development, finding, annotation etc.
+# Documentation
+# Execution of python script from within wiki

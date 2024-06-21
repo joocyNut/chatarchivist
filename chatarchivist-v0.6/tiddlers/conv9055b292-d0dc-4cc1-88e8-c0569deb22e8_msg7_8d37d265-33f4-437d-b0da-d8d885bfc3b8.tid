@@ -1,0 +1,42 @@
+author: assistant
+conversation_id: 9055b292-d0dc-4cc1-88e8-c0569deb22e8
+message_id: 8d37d265-33f4-437d-b0da-d8d885bfc3b8
+tags: chatgptmessage
+timestamp: 202406141509350000
+title: conv9055b292-d0dc-4cc1-88e8-c0569deb22e8_msg7_8d37d265-33f4-437d-b0da-d8d885bfc3b8
+type: text/vnd.tiddlywiki
+
+It appears that the Unix timestamps extracted from your JSON data are extremely large, resulting in the `ValueError: year 56423 is out of range` when attempting to convert them into datetime objects using `datetime.utcfromtimestamp(unix_timestamp)`.
+
+Unix timestamps represent the number of seconds (or occasionally milliseconds) since January 1st, 1970 (UTC). The timestamps you're encountering (`1718376920856`, `1718377205721`, `1718377131113`) are likely in milliseconds rather than seconds. Therefore, you need to convert them from milliseconds to seconds before passing them to `datetime.utcfromtimestamp()`.
+
+Here’s how you can modify the `format_timestamp` function to handle timestamps given in milliseconds:
+
+```python
+def format_timestamp(unix_timestamp):
+    try:
+        # Convert milliseconds to seconds
+        unix_timestamp_seconds = unix_timestamp / 1000.0
+        # Convert Unix timestamp to datetime object
+        dt_object = datetime.utcfromtimestamp(unix_timestamp_seconds)
+        # Format the datetime object
+        formatted_timestamp = dt_object.strftime('%Y%m%d%H%M%S')
+        return formatted_timestamp
+    except ValueError as e:
+        print(f"Error converting timestamp {unix_timestamp}: {e}")
+        return None
+```
+
+### Changes Made:
+- **Conversion from Milliseconds to Seconds**: Before passing `unix_timestamp` to `datetime.utcfromtimestamp()`, divide `unix_timestamp` by `1000.0` to convert it from milliseconds to seconds.
+- **Error Handling**: Added a try-except block to catch any `ValueError` that might occur during the conversion process and print an error message.
+
+By making this adjustment, the script should be able to handle the timestamps provided in your JSON data properly. Make sure to replace the `format_timestamp` function in your original script with this updated version.
+
+### Example Usage:
+
+```bash
+python3 superpower_import.py 2024-06-14-conversations.zip /home/hamma/surp conv.json
+```
+
+This command should now execute without the `ValueError` related to out-of-range years, assuming there are no other issues with your data format or structure.

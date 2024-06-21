@@ -1,0 +1,9 @@
+author: user
+conversation_id: 022e0134-58a1-494d-8f8e-b9c379db2006
+message_id: 8f427375-339a-45fc-a790-9cc2e922b52c
+tags: chatgptmessage
+timestamp: 202405301757540000
+title: conv022e0134-58a1-494d-8f8e-b9c379db2006_msg5_8f427375-339a-45fc-a790-9cc2e922b52c
+type: text/vnd.tiddlywiki
+
+it gives me this error /usr/bin/python3: can't find '__main__' module in '/home/hamma/2024-05-30-conversations.zip'

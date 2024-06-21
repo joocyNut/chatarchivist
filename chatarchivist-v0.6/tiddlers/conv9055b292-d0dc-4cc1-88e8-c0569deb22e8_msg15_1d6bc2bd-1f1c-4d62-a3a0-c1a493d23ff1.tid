@@ -1,0 +1,130 @@
+author: assistant
+conversation_id: 9055b292-d0dc-4cc1-88e8-c0569deb22e8
+message_id: 1d6bc2bd-1f1c-4d62-a3a0-c1a493d23ff1
+tags: chatgptmessage
+timestamp: 202406141514150000
+title: conv9055b292-d0dc-4cc1-88e8-c0569deb22e8_msg15_1d6bc2bd-1f1c-4d62-a3a0-c1a493d23ff1
+type: text/vnd.tiddlywiki
+
+The error message `TypeError: unsupported operand type(s) for /: 'NoneType' and 'float'` indicates that the `format_timestamp` function received a `NoneType` (likely indicating `timestamp` was not properly extracted or parsed) instead of a valid timestamp value. This occurred specifically when attempting to divide `unix_timestamp` by `1000.0` to convert milliseconds to seconds.
+
+To address this issue and ensure robust handling of potentially missing or malformed timestamps, let's modify the script to include additional checks and logging:
+
+```python
+import json
+import uuid
+import sys
+import os
+import zipfile
+from datetime import datetime
+
+def format_timestamp(unix_timestamp):
+    try:
+        if unix_timestamp is None:
+            return None
+        
+        # Convert milliseconds to seconds
+        unix_timestamp_seconds = unix_timestamp / 1000.0
+        # Convert Unix timestamp to datetime object
+        dt_object = datetime.utcfromtimestamp(unix_timestamp_seconds)
+        # Format the datetime object with milliseconds
+        formatted_timestamp = dt_object.strftime('%Y%m%d%H%M%S%f')[:-3]
+        return formatted_timestamp
+    except ValueError as e:
+        print(f"Error converting timestamp {unix_timestamp}: {e}")
+        return None
+
+def process_exported_json(data, filename):
+    tiddlers = []
+
+    conversation_id = str(uuid.uuid4())
+
+    conversation_tiddler = {
+        'title': conversation_id,
+        'tags': 'chatgptconversation',
+        'chatgptelement': 'conversation',
+        'conversation_title': data.get('title', filename)  # Use .get() for safer access
+    }
+    tiddlers.append(conversation_tiddler)
+
+    for i, (node_id, node_data) in enumerate(data.get('mapping', {}).items(), start=1):
+        message = node_data.get('message', {})
+        if message and 'create_time' in message:
+            timestamp = message['create_time']
+            formatted_timestamp = format_timestamp(timestamp)
+            if formatted_timestamp is None:
+                print(f"Invalid timestamp found in node_id {node_id} for file {filename}")
+                continue  # Skip this message if timestamp cannot be formatted
+
+            message_id = str(uuid.uuid4())
+            title = f"conv{conversation_id}_msg{i}_{message_id}"
+
+            tiddler = {
+                'title': title,
+                'text': message.get('content', {}).get('parts', [''])[0],
+                'author': message.get('author', {}).get('role', 'unknown'),
+                'conversation_id': conversation_id,
+                'message_id': message_id,
+                'tags': 'chatgptmessage',
+                'timestamp': formatted_timestamp
+            }
+            tiddlers.append(tiddler)
+        else:
+            print(f"Invalid message data found in node_id {node_id} for file {filename}")
+
+    return tiddlers
+
+def process_zip_and_exported_json(zip_filepath, output_dir, output_file):
+    all_tiddlers = []  # Accumulate tiddlers from all files
+    with zipfile.ZipFile(zip_filepath, 'r') as zip_ref:
+        for filename in zip_ref.namelist():
+            if filename.endswith('.json'):
+                with zip_ref.open(filename) as json_file:
+                    try:
+                        data = json.load(json_file)
+                        tiddlers = process_exported_json(data, filename)
+                        all_tiddlers.extend(tiddlers)
+                    except json.JSONDecodeError as e:
+                        print(f"Error decoding JSON file {filename}: {e}")
+
+    # Write the combined output directly to the specified directory
+    output_filename = os.path.join(output_dir, output_file)
+    with open(output_filename, 'w', encoding='utf-8') as f:
+        json.dump(all_tiddlers, f, indent=4)
+
+if __name__ == "__main__":
+    if len(sys.argv) != 4:
+        print("Usage: python import_json.py <input_zip_file> <output_directory> <output_file>")
+        sys.exit(1)
+
+    zip_filepath = sys.argv[1]
+    output_dir = sys.argv[2]
+    output_file = sys.argv[3]
+
+    if not os.path.isfile(zip_filepath):
+        print(f"Error: Input zip file '{zip_filepath}' does not exist.")
+        sys.exit(1)
+
+    os.makedirs(output_dir, exist_ok=True)
+
+    process_zip_and_exported_json(zip_filepath, output_dir, output_file)
+```
+
+### Key Adjustments and Fixes:
+
+1. **Enhanced Error Handling in `format_timestamp`**:
+   - Added an explicit check for `None` values in `unix_timestamp`. If `None` is detected, the function now returns `None` early without attempting further operations.
+
+2. **Improved Error Logging**:
+   - Added more informative print statements within `process_exported_json` to identify and log issues related to invalid timestamps or missing data in the JSON structure.
+
+3. **JSON Decoding Error Handling**:
+   - The script now catches `json.JSONDecodeError` exceptions when loading JSON files from the zip archive, providing feedback on any decoding issues encountered.
+
+### Recommendations:
+
+- **Check Data Consistency**: Ensure that the JSON files within your zip archive consistently contain the expected structure (`'create_time'` field where necessary).
+
+- **Logging and Debugging**: Continue to use detailed logging and possibly a debugger to investigate and troubleshoot any remaining issues with timestamp conversion or JSON parsing.
+
+By implementing these adjustments, the script should now handle a wider range of scenarios and provide more detailed feedback when encountering issues during timestamp formatting or JSON processing. This should help in identifying and addressing any remaining issues in your data processing workflow.

@@ -1,0 +1,9 @@
+author: user
+conversation_id: 80de3e47-0f2a-4053-b6ee-83a6b6e7cf8d
+message_id: 7164464c-7fc2-4c1c-ada5-3946cc96cf58
+tags: chatgptmessage
+timestamp: 202406141531070000
+title: conv80de3e47-0f2a-4053-b6ee-83a6b6e7cf8d_msg6_7164464c-7fc2-4c1c-ada5-3946cc96cf58
+type: text/vnd.tiddlywiki
+
+this converts the timestamp from seconds since the UNIX epoch to milliseconds since the UNIX epoch, which is incorrect. the timestamp given is in seconds since the UNIX epoch. 1718377131113 the last 3 digits in this timestamp are milliseconds and can be dropped

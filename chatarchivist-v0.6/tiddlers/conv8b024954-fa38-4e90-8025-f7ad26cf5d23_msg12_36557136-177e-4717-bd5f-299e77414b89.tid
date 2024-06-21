@@ -1,0 +1,78 @@
+author: assistant
+conversation_id: 8b024954-fa38-4e90-8025-f7ad26cf5d23
+message_id: 36557136-177e-4717-bd5f-299e77414b89
+tags: chatgptmessage
+timestamp: 202406051914320000
+title: conv8b024954-fa38-4e90-8025-f7ad26cf5d23_msg12_36557136-177e-4717-bd5f-299e77414b89
+type: text/vnd.tiddlywiki
+
+Sure, I'll modify the script to generate a single JSON file containing all messages and conversation details:
+
+```python
+import json
+import uuid
+import sys
+import os
+
+def process_exported_json(input_file, output_file):
+    with open(input_file, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+
+    conversations = {}
+    messages = []
+
+    # Extract conversation details
+    for node_id, node_data in data['mapping'].items():
+        message = node_data['message']
+        if message and message['create_time'] is not None:
+            conversation_id = data['id']
+            conversation_title = data['title']
+            conversations[conversation_id] = {
+                'title': conversation_title,
+                'id': conversation_id
+            }
+            break
+
+    # Extract messages
+    for node_id, node_data in data['mapping'].items():
+        message = node_data['message']
+        if message and message['create_time'] is not None:
+            conversation_id = conversations[data['id']]['id']
+            message_id = str(uuid.uuid4()).replace("-", "")
+            timestamp = str(int(message['create_time'] * 1000))  # Convert to milliseconds
+            title = f"conv{conversation_id}_msg{message['id']}_{message_id}"
+
+            tiddler = {
+                'title': title,
+                'text': message['content']['parts'][0],
+                'author': message['author']['role'],
+                'conversation_id': conversation_id,
+                'message_id': message_id,
+                'tags': 'chatgptmessage',
+                'timestamp': timestamp
+            }
+            messages.append(tiddler)
+
+    # Save conversation details and messages
+    output_data = {'conversations': list(conversations.values()), 'messages': messages}
+    with open(output_file, 'w', encoding='utf-8') as f:
+        json.dump(output_data, f, indent=4)
+
+if __name__ == "__main__":
+    if len(sys.argv) != 3:
+        print("Usage: python import_json.py <input_json_file> <output_json_file>")
+        sys.exit(1)
+
+    input_file = sys.argv[1]
+    output_file = sys.argv[2]
+
+    process_exported_json(input_file, output_file)
+```
+
+With this script, you only need to specify the input JSON file and the desired output JSON file as arguments when running the script:
+
+```
+python3 import_json.py input.json output.json
+```
+
+This will generate a single JSON file containing all the conversation details and messages.

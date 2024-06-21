@@ -1,0 +1,9 @@
+author: user
+conversation_id: 8b024954-fa38-4e90-8025-f7ad26cf5d23
+message_id: 81c2c7ce-2d11-4c3d-926f-337b3c011d4b
+tags: chatgptmessage
+timestamp: 202406051905060000
+title: conv8b024954-fa38-4e90-8025-f7ad26cf5d23_msg19_81c2c7ce-2d11-4c3d-926f-337b3c011d4b
+type: text/vnd.tiddlywiki
+
+perfect, now how do i make it so that when I import the tiddlers, a new tiddler is created with the field tags with the value chatgptconversation, a field called chatgptelement with the value conversation, a conversation_title field with the value of what the name of the conversation is on ChatGPT, and a title field with a value that looks similar to this "003542b7-2cf9-4606-8e06-30ff7115f69a"

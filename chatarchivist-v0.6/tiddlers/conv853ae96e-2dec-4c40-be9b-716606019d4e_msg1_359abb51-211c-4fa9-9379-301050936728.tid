@@ -1,0 +1,9 @@
+author: user
+conversation_id: 853ae96e-2dec-4c40-be9b-716606019d4e
+message_id: 359abb51-211c-4fa9-9379-301050936728
+tags: chatgptmessage
+timestamp: 202406101452260000
+title: conv853ae96e-2dec-4c40-be9b-716606019d4e_msg1_359abb51-211c-4fa9-9379-301050936728
+type: text/vnd.tiddlywiki
+
+the script needs to format the date from UNIX seconds since epoch into a string of numbers that looks like this 20230921233232816. That string is formatted as follows YYYYMMDDHHMMSS

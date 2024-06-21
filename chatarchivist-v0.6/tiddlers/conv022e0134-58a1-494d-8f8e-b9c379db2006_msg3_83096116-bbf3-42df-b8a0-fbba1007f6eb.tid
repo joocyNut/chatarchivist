@@ -1,0 +1,17 @@
+author: user
+conversation_id: 022e0134-58a1-494d-8f8e-b9c379db2006
+message_id: 83096116-bbf3-42df-b8a0-fbba1007f6eb
+tags: chatgptmessage
+timestamp: 202405301805250000
+title: conv022e0134-58a1-494d-8f8e-b9c379db2006_msg3_83096116-bbf3-42df-b8a0-fbba1007f6eb
+type: text/vnd.tiddlywiki
+
+hamma@AndrewsPC:~$ python3 pyscript.py /home/hamma/2024-05-30-conversations.zip /home/hamma
+Traceback (most recent call last):
+  File "/home/hamma/pyscript.py", line 77, in <module>
+    output_file_path = extract_and_convert_conversations(zip_file_path, output_dir)
+  File "/home/hamma/pyscript.py", line 63, in extract_and_convert_conversations
+    all_tiddlers.extend(process_conversation_file(zip_ref, file_info, conversation_id))
+  File "/home/hamma/pyscript.py", line 44, in process_conversation_file
+    'text': ' '.join(text_parts).replace(''', '''),
+TypeError: replace expected at least 2 arguments, got 1

@@ -1,0 +1,15 @@
+author: user
+conversation_id: 8b024954-fa38-4e90-8025-f7ad26cf5d23
+message_id: 4680a706-acd6-4421-8d51-6bc2a105b9d5
+tags: chatgptmessage
+timestamp: 202406051856520000
+title: conv8b024954-fa38-4e90-8025-f7ad26cf5d23_msg9_4680a706-acd6-4421-8d51-6bc2a105b9d5
+type: text/vnd.tiddlywiki
+
+hamma@AndrewsPC:~$ python3 import_json.py 14-47-31-New_chat.json /home/hamma
+Traceback (most recent call last):
+  File "/home/hamma/import_json.py", line 51, in <module>
+    process_exported_json(input_file, output_dir)
+  File "/home/hamma/import_json.py", line 17, in process_exported_json
+    timestamp = str(int(message['create_time'] * 1000))  # Convert to milliseconds
+TypeError: unsupported operand type(s) for *: 'NoneType' and 'int'

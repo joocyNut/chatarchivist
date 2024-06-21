@@ -1,0 +1,27 @@
+author: assistant
+conversation_id: 9595600a-f9cc-4ae0-9747-4bdf4aa204b3
+message_id: 6c538e48-2be6-4441-a0ba-9502893f385f
+tags: chatgptmessage
+timestamp: 202406101511200000
+title: conv9595600a-f9cc-4ae0-9747-4bdf4aa204b3_msg8_6c538e48-2be6-4441-a0ba-9502893f385f
+type: text/vnd.tiddlywiki
+
+It looks like the `json_content` variable is being treated as a list instead of a dictionary at some point in your code. Let's check the `json.load(file)` call in the `process_conversation_file` function. 
+
+The error message indicates that `json_content` is a list, and when you try to call the `.get()` method on it, it throws an `AttributeError` because lists don't have a `.get()` method.
+
+To fix this, we need to make sure that `json_content` is a dictionary. It's likely that your JSON file is a list of dictionaries, and you need to iterate over each dictionary in that list. Let's update the code to handle this scenario:
+
+```python
+with zip_ref.open(file_info) as file:
+    json_content_list = json.load(file)
+
+for json_content in json_content_list:
+    conversation_title = json_content.get('title', 'UnknownTitle')
+    conversation_template = json_content.get('conversation_template_id', 'UnknownTemplate')
+    
+    for message_key, message_value in json_content.get('mapping', {}).items():
+        # Process each message as before
+```
+
+This change assumes that each JSON file inside the ZIP contains a list of dictionaries, and we iterate over each dictionary to process the conversation.

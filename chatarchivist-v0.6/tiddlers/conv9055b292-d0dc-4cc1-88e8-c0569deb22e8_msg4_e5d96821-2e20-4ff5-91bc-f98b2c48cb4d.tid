@@ -1,0 +1,126 @@
+author: assistant
+conversation_id: 9055b292-d0dc-4cc1-88e8-c0569deb22e8
+message_id: e5d96821-2e20-4ff5-91bc-f98b2c48cb4d
+tags: chatgptmessage
+timestamp: 202406141513320000
+title: conv9055b292-d0dc-4cc1-88e8-c0569deb22e8_msg4_e5d96821-2e20-4ff5-91bc-f98b2c48cb4d
+type: text/vnd.tiddlywiki
+
+It seems there is still an issue with the timestamp conversion. The error message `ValueError: year 56423 is out of range` indicates that the `datetime.utcfromtimestamp` function is receiving an invalid Unix timestamp. This typically happens when the timestamp value is either too large or too small to be converted into a valid datetime object.
+
+To troubleshoot and handle this issue effectively, let's add additional checks and logging to better understand the problematic timestamps and adjust our approach accordingly:
+
+```python
+import json
+import uuid
+import sys
+import os
+import zipfile
+from datetime import datetime
+
+def format_timestamp(unix_timestamp):
+    try:
+        # Convert milliseconds to seconds
+        unix_timestamp_seconds = unix_timestamp / 1000.0
+        # Convert Unix timestamp to datetime object
+        dt_object = datetime.utcfromtimestamp(unix_timestamp_seconds)
+        # Format the datetime object with milliseconds
+        formatted_timestamp = dt_object.strftime('%Y%m%d%H%M%S%f')[:-3]
+        return formatted_timestamp
+    except ValueError as e:
+        print(f"Error converting timestamp {unix_timestamp}: {e}")
+        return None
+
+def process_exported_json(data, filename):
+    tiddlers = []
+
+    conversation_id = str(uuid.uuid4())
+
+    conversation_tiddler = {
+        'title': conversation_id,
+        'tags': 'chatgptconversation',
+        'chatgptelement': 'conversation',
+        'conversation_title': data.get('title', filename)  # Use .get() for safer access
+    }
+    tiddlers.append(conversation_tiddler)
+
+    for i, (node_id, node_data) in enumerate(data.get('mapping', {}).items(), start=1):
+        message = node_data.get('message', {})
+        if message and 'create_time' in message:
+            timestamp = message['create_time']
+            formatted_timestamp = format_timestamp(timestamp)
+            if formatted_timestamp is None:
+                continue  # Skip this message if timestamp cannot be formatted
+
+            message_id = str(uuid.uuid4())
+            title = f"conv{conversation_id}_msg{i}_{message_id}"
+
+            tiddler = {
+                'title': title,
+                'text': message.get('content', {}).get('parts', [''])[0],
+                'author': message.get('author', {}).get('role', 'unknown'),
+                'conversation_id': conversation_id,
+                'message_id': message_id,
+                'tags': 'chatgptmessage',
+                'timestamp': formatted_timestamp
+            }
+            tiddlers.append(tiddler)
+        else:
+            print(f"Invalid message data found in node_id {node_id} for file {filename}")
+
+    return tiddlers
+
+def process_zip_and_exported_json(zip_filepath, output_dir, output_file):
+    all_tiddlers = []  # Accumulate tiddlers from all files
+    with zipfile.ZipFile(zip_filepath, 'r') as zip_ref:
+        for filename in zip_ref.namelist():
+            if filename.endswith('.json'):
+                with zip_ref.open(filename) as json_file:
+                    try:
+                        data = json.load(json_file)
+                        tiddlers = process_exported_json(data, filename)
+                        all_tiddlers.extend(tiddlers)
+                    except json.JSONDecodeError as e:
+                        print(f"Error decoding JSON file {filename}: {e}")
+
+    # Write the combined output directly to the specified directory
+    output_filename = os.path.join(output_dir, output_file)
+    with open(output_filename, 'w', encoding='utf-8') as f:
+        json.dump(all_tiddlers, f, indent=4)
+
+if __name__ == "__main__":
+    if len(sys.argv) != 4:
+        print("Usage: python import_json.py <input_zip_file> <output_directory> <output_file>")
+        sys.exit(1)
+
+    zip_filepath = sys.argv[1]
+    output_dir = sys.argv[2]
+    output_file = sys.argv[3]
+
+    if not os.path.isfile(zip_filepath):
+        print(f"Error: Input zip file '{zip_filepath}' does not exist.")
+        sys.exit(1)
+
+    os.makedirs(output_dir, exist_ok=True)
+
+    process_zip_and_exported_json(zip_filepath, output_dir, output_file)
+```
+
+### Key Adjustments:
+
+1. **Error Handling in `process_exported_json`**:
+   - Added additional checks to handle cases where `message['create_time']` might be missing or invalid.
+   - Improved error messages and logging to indicate which file and node caused the issue.
+
+2. **Handling JSON Decoding Errors**:
+   - Added a `try-except` block around `json.load(json_file)` in `process_zip_and_exported_json` to catch `json.JSONDecodeError` exceptions. This helps in identifying issues with JSON formatting or structure within the zip file.
+
+### Recommendations:
+
+- **Verify JSON Structure**: Ensure that all JSON files within the zip archive are correctly formatted and contain the expected structure (`'create_time'` field where necessary).
+  
+- **Check Timestamp Range**: If the error persists, verify the range of Unix timestamps being used. Extremely large or small timestamps may still cause issues with `datetime.utcfromtimestamp()`.
+
+- **Logging and Debugging**: Consider adding more detailed logging statements or using a debugger to inspect problematic timestamps and understand their nature better.
+
+By implementing these adjustments, you should have a more resilient script that handles various edge cases and provides clearer feedback when encountering issues with timestamp conversion or JSON parsing.

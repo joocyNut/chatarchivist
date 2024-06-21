@@ -1,0 +1,9 @@
+created: 20240115031317912
+modified: 20240613190718531
+tags: 
+title: Delete current conversations
+
+#Copy  [tag[chatgptmessage]!tag[shared]] [tag[chatgptconversation]!tag[shared]] into your clipboard <<copy-to-clipboard "[tag[chatgptmessage]!tag[shared]] [tag[chatgptconversation]!tag[shared]]">>
+#Paste into $:/AdvancedSearch
+#Select filter 
+#Delete

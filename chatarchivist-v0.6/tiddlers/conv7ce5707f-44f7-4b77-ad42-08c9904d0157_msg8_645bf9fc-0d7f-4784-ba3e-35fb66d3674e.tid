@@ -1,0 +1,18 @@
+author: user
+conversation_id: 7ce5707f-44f7-4b77-ad42-08c9904d0157
+message_id: 645bf9fc-0d7f-4784-ba3e-35fb66d3674e
+tags: chatgptmessage
+timestamp: 202406141533180000
+title: conv7ce5707f-44f7-4b77-ad42-08c9904d0157_msg8_645bf9fc-0d7f-4784-ba3e-35fb66d3674e
+type: text/vnd.tiddlywiki
+
+Traceback (most recent call last):
+  File "/home/hamma/surp/superpower_import.py", line 85, in <module>
+    output_file_path = process_zip_and_exported_json(zip_filepath, output_dir)
+  File "/home/hamma/surp/superpower_import.py", line 58, in process_zip_and_exported_json
+    tiddlers = process_exported_json(data, filename)
+  File "/home/hamma/surp/superpower_import.py", line 31, in process_exported_json
+    formatted_timestamp = format_tiddlywiki_date(timestamp)
+  File "/home/hamma/surp/superpower_import.py", line 10, in format_tiddlywiki_date
+    return datetime.utcfromtimestamp(epoch_time).strftime('%Y%m%d%H%M%S0000')
+ValueError: year 56423 is out of range

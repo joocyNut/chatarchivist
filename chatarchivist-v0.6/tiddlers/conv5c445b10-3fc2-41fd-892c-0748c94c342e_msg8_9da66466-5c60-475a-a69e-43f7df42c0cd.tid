@@ -1,0 +1,20 @@
+author: user
+conversation_id: 5c445b10-3fc2-41fd-892c-0748c94c342e
+message_id: 9da66466-5c60-475a-a69e-43f7df42c0cd
+tags: chatgptmessage
+timestamp: 202406181742250000
+title: conv5c445b10-3fc2-41fd-892c-0748c94c342e_msg8_9da66466-5c60-475a-a69e-43f7df42c0cd
+type: text/vnd.tiddlywiki
+
+<$button>
+Open all
+<$action-setfield $tiddler=<<currentTiddler>> details_state="open"/>
+</$button>
+<$button>
+Close all
+<$action-setfield $tiddler=<<currentTiddler>> details_state=""/>
+</$button>
+
+<$list filter="[conversation_id{!!title}sort[timestamp]]" counter="num">
+
+<$details summary= state="!!details_state"> why doesn't this work

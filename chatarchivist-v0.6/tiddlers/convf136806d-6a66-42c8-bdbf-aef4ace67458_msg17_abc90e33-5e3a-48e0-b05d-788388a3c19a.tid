@@ -1,0 +1,17 @@
+author: user
+conversation_id: f136806d-6a66-42c8-bdbf-aef4ace67458
+message_id: abc90e33-5e3a-48e0-b05d-788388a3c19a
+tags: chatgptmessage
+timestamp: 202406051940320000
+title: convf136806d-6a66-42c8-bdbf-aef4ace67458_msg17_abc90e33-5e3a-48e0-b05d-788388a3c19a
+type: text/vnd.tiddlywiki
+
+hamma@AndrewsPC:~$ python3 import_json.py 2024-06-05-conversations.zip /home/hamma
+Traceback (most recent call last):
+  File "/home/hamma/import_json.py", line 80, in <module>
+    process_exported_json(input_file, output_dir)
+  File "/home/hamma/import_json.py", line 22, in process_exported_json
+    process_conversation(item, tiddlers)
+  File "/home/hamma/import_json.py", line 42, in process_conversation
+    'conversation_title': data['title']
+KeyError: 'title'

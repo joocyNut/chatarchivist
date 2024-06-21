@@ -1,0 +1,11 @@
+author: user
+conversation_id: 80de3e47-0f2a-4053-b6ee-83a6b6e7cf8d
+message_id: 9ebaedef-c66f-4cf5-bce9-e6e20dcd5d9c
+tags: chatgptmessage
+timestamp: 202406141521280000
+title: conv80de3e47-0f2a-4053-b6ee-83a6b6e7cf8d_msg20_9ebaedef-c66f-4cf5-bce9-e6e20dcd5d9c
+type: text/vnd.tiddlywiki
+
+Error converting timestamp 1718376920856: year 56423 is out of range
+Error converting timestamp 1718377205721: year 56423 is out of range
+Error converting timestamp 1718377131113: year 56423 is out of range, the timestamp should be created from the timestamp field in the JSON file where it is represented as seconds since the UNIX epoch. then it should be formatted as YYYYMMDDHHMMSS

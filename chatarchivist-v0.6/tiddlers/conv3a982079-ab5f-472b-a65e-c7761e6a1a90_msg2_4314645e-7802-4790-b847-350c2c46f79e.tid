@@ -1,0 +1,26 @@
+author: assistant
+conversation_id: 3a982079-ab5f-472b-a65e-c7761e6a1a90
+message_id: 4314645e-7802-4790-b847-350c2c46f79e
+tags: chatgptmessage
+timestamp: 202406031816330000
+title: conv3a982079-ab5f-472b-a65e-c7761e6a1a90_msg2_4314645e-7802-4790-b847-350c2c46f79e
+type: text/vnd.tiddlywiki
+
+Here's the modified code incorporating the tags from the templates you provided:
+
+```html
+<p>Start typing to search for in message text (prompt or response)</p>
+<$edit-text tiddler="SearchFor" field="text"/><p/>
+<$vars searchfor=SearchFor>
+Found <$count filter="[conversation-hub]search:text<searchfor>sort[title]each[conversation_id]"/>
+with "<$text text=SearchFor$>"
+<hr>
+<$list filter="[conversation-hub]search:text<searchfor>sort[title]each[conversation_id]">
+<b><$view field="conversation_title"/></b>
+<$link>Message</$link> 
+<$link to=<<currentTiddler>>>Conversation</$link><hr>
+</$list>
+</$vars>
+```
+
+This code will allow users to search for text in the messages (prompts or responses) within conversations. It will display the number of conversations found containing the searched text, along with links to the messages and conversations where the text was found.

@@ -1,0 +1,9 @@
+author: user
+conversation_id: 8b024954-fa38-4e90-8025-f7ad26cf5d23
+message_id: dc29a4d6-de3e-4a01-af90-40e2abf5c217
+tags: chatgptmessage
+timestamp: 202406051914220000
+title: conv8b024954-fa38-4e90-8025-f7ad26cf5d23_msg16_dc29a4d6-de3e-4a01-af90-40e2abf5c217
+type: text/vnd.tiddlywiki
+
+make it so the script creates only one json file

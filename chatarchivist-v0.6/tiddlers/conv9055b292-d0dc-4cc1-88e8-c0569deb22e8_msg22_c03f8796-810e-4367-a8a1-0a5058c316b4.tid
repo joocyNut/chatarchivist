@@ -1,0 +1,12 @@
+author: user
+conversation_id: 9055b292-d0dc-4cc1-88e8-c0569deb22e8
+message_id: c03f8796-810e-4367-a8a1-0a5058c316b4
+tags: chatgptmessage
+timestamp: 202406141509280000
+title: conv9055b292-d0dc-4cc1-88e8-c0569deb22e8_msg22_c03f8796-810e-4367-a8a1-0a5058c316b4
+type: text/vnd.tiddlywiki
+
+hamma@AndrewsPC:~/surp$ python3 superpower_import.py 2024-06-14-conversations.zip /home/hamma/surp conv.json
+Error converting timestamp 1718376920856: year 56423 is out of range
+Error converting timestamp 1718377205721: year 56423 is out of range
+Error converting timestamp 1718377131113: year 56423 is out of range

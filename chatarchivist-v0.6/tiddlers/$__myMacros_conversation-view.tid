@@ -1,0 +1,15 @@
+created: 20240606161015591
+modified: 20240606172754985
+tags: $:/tags/Macro
+title: $:/myMacros/conversation-view
+
+\define set-view-template()
+<$set name="userChoice" filter="[[User Choice]] :get[text]">
+<$reveal text=<<userChoice>> type="match" text="option1">
+    <$action-setfield $tiddler="$:/core/ui/DefaultTiddlers" $field="view-template" $value="chatgptconversation_template"/>
+</$reveal>
+<$reveal text=<<userChoice>> type="match" text="option2">
+    <$action-setfield $tiddler="$:/core/ui/DefaultTiddlers" $field="view-template" $value="$:/plugins/chatarchivist/templates/conversation-adding-images"/>
+</$reveal>
+</$set>
+\end

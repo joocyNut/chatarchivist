@@ -1,0 +1,19 @@
+author: user
+conversation_id: 022e0134-58a1-494d-8f8e-b9c379db2006
+message_id: f4d84dd0-3c2b-46a5-9067-d7f1d172ea42
+tags: chatgptmessage
+timestamp: 202405301802070000
+title: conv022e0134-58a1-494d-8f8e-b9c379db2006_msg6_f4d84dd0-3c2b-46a5-9067-d7f1d172ea42
+type: text/vnd.tiddlywiki
+
+python3 pyscript.py 13-22-51-Cupertino_Climate__Warm__Mild.json /home/hamma
+Traceback (most recent call last):
+  File "/home/hamma/pyscript.py", line 77, in <module>
+    output_file_path = extract_and_convert_conversations(zip_file_path, output_dir)
+  File "/home/hamma/pyscript.py", line 59, in extract_and_convert_conversations
+    with ZipFile(zip_path, 'r') as zip_ref:
+  File "/usr/lib/python3.10/zipfile.py", line 1269, in __init__
+    self._RealGetContents()
+  File "/usr/lib/python3.10/zipfile.py", line 1336, in _RealGetContents
+    raise BadZipFile("File is not a zip file")
+zipfile.BadZipFile: File is not a zip file

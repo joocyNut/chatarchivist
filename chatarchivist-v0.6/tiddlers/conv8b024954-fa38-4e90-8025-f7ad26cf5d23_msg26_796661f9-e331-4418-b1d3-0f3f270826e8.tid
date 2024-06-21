@@ -1,0 +1,14 @@
+author: user
+conversation_id: 8b024954-fa38-4e90-8025-f7ad26cf5d23
+message_id: 796661f9-e331-4418-b1d3-0f3f270826e8
+tags: chatgptmessage
+timestamp: 202406051850010000
+title: conv8b024954-fa38-4e90-8025-f7ad26cf5d23_msg26_796661f9-e331-4418-b1d3-0f3f270826e8
+type: text/vnd.tiddlywiki
+
+Traceback (most recent call last):
+  File "/home/hamma/import_json.py", line 32, in <module>
+    process_exported_json(input_file, output_file)
+  File "/home/hamma/import_json.py", line 5, in process_exported_json
+    with open(input_file, 'r', encoding='utf-8') as f:
+FileNotFoundError: [Errno 2] No such file or directory: 'exported_data.json'

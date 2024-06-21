@@ -1,0 +1,9 @@
+author: user
+conversation_id: 80de3e47-0f2a-4053-b6ee-83a6b6e7cf8d
+message_id: 778fa80c-86a1-41b2-b91a-47c897b44817
+tags: chatgptmessage
+timestamp: 202406141522390000
+title: conv80de3e47-0f2a-4053-b6ee-83a6b6e7cf8d_msg7_778fa80c-86a1-41b2-b91a-47c897b44817
+type: text/vnd.tiddlywiki
+
+no, its seconds since the unix epoch not milliseconds

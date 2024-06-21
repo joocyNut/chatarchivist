@@ -1,0 +1,81 @@
+author: user
+conversation_id: fbcbcfd8-e57c-4f5d-ac88-a074cd480873
+message_id: bcfa7e4a-6253-4103-be49-2785264b7ce4
+tags: chatgptmessage
+timestamp: 202406141439530000
+title: convfbcbcfd8-e57c-4f5d-ac88-a074cd480873_msg23_bcfa7e4a-6253-4103-be49-2785264b7ce4
+type: text/vnd.tiddlywiki
+
+import json
+import os
+from zipfile import ZipFile
+from datetime import datetime, timezone
+import sys
+import hashlib
+
+def format_tiddlywiki_date(epoch_time):
+    '''Convert epoch time to TiddlyWiki date format YYYYMMDDhhmmssss, using timezone-aware datetime.'''
+    return datetime.fromtimestamp(epoch_time, timezone.utc).strftime('%Y%m%d%H%M%S0000')
+
+def generate_file_hash(file_name):
+    '''Generate a hash for the file name as an additional unique identifier.'''
+    return hashlib.md5(file_name.encode('utf-8')).hexdigest()
+
+def process_conversation_file(conversations, conversation_id):
+    '''Process the conversations JSON data.'''
+    tiddlers = []
+    for conversation in conversations:
+        for message_key, message_value in conversation.get('mapping', {}).items():
+            message = message_value.get('message')
+            if message and isinstance(message, dict):
+                create_time = message.get('create_time')
+                content = message.get('content', {})
+                parts = content.get('parts', [])
+                text_parts = []
+                for part in parts:
+                    if isinstance(part, str):
+                        text_parts.append(part)
+                    elif isinstance(part, dict):  # Handle dict within parts
+                        text_parts.append(json.dumps(part))  # Convert dict to string
+                    # Add more conditions as necessary for other data types
+                if create_time and text_parts:
+                    tiddler = {
+                        'title': message_key,
+                        'text': ' '.join(text_parts).replace("'", ""),
+                        'tags': ['Conversation'],
+                        'date': format_tiddlywiki_date(create_time),
+                        'message-type': 'response' if message.get('author', {}).get('role') == 'assistant' else 'prompt',
+                        'conversation_id': conversation_id,
+                        'conversation_title': conversation.get('title', 'UnknownTitle'),
+                        'conversation_template': conversation.get('conversation_template_id', 'UnknownTemplate'),
+                        'file_hash': generate_file_hash('conversations.json')
+                    }
+                    tiddlers.append(tiddler)
+    return tiddlers
+
+def extract_and_convert_conversations(zip_path, output_directory):
+    '''Extract conversations from the conversations.json file in a zip archive and convert to TiddlyWiki format.'''
+    all_tiddlers = []
+    with ZipFile(zip_path, 'r') as zip_ref:
+        with zip_ref.open('conversations.json') as file:
+            conversations = json.load(file)
+            conversation_id = os.path.splitext(os.path.basename(zip_path))[0]  # Use ZIP file name as conversation ID
+            all_tiddlers.extend(process_conversation_file(conversations, conversation_id))
+
+    if not os.path.exists(output_directory):
+        os.makedirs(output_directory)
+    
+    output_path = os.path.join(output_directory, 'all_conversations_tiddlywiki.json')
+    with open(output_path, 'w') as outfile:
+        json.dump(all_tiddlers, outfile)
+    
+    return output_path
+
+if len(sys.argv) >= 3:
+    zip_file_path = sys.argv[1]
+    output_dir = sys.argv[2]
+    output_file_path = extract_and_convert_conversations(zip_file_path, output_dir)
+    print(f'Conversations extracted and saved to {output_file_path}')
+else:
+    print('Usage: python script.py <path_to_zip_file> <output_directory>')
+I want this code to make a tiddler tagged chatgptconversation that has a title that is the same as the chatgptmessage tagged tiddlers. each chatgptmessage should contain the message text, a field called author (value of either user or assistant), message_id field which is a random string, conversation_id field which is a random string, timestamp field with value formatted like YYYYMMDDHHMMSS, chatgptmessage tiddlers should be titled chronologically in this format "conv(conversation number)(conversation_id)_msg(chronological message number)(message_id)"

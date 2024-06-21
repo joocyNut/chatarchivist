@@ -1,0 +1,15 @@
+author: user
+conversation_id: 8b024954-fa38-4e90-8025-f7ad26cf5d23
+message_id: e698cd6d-1878-44df-a00e-8c2ee6629cdf
+tags: chatgptmessage
+timestamp: 202406051851460000
+title: conv8b024954-fa38-4e90-8025-f7ad26cf5d23_msg6_e698cd6d-1878-44df-a00e-8c2ee6629cdf
+type: text/vnd.tiddlywiki
+
+hamma@AndrewsPC:~$ python3 import_json.py 14-47-31-New_chat.json /home/hamma
+Traceback (most recent call last):
+  File "/home/hamma/import_json.py", line 48, in <module>
+    process_exported_json(input_file, output_dir)
+  File "/home/hamma/import_json.py", line 10, in process_exported_json
+    conversations = data['conversations']
+KeyError: 'conversations'

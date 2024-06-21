@@ -1,0 +1,33 @@
+created: 20240603214354849
+modified: 20240619191632107
+tags: $:/tags/Macro $:/tags/Macros
+title: annotate-button-setfield
+
+\define annotation-tiddler() $(message_id)$-Annotation
+
+\define annotate(message_id)
+<$list filter="[field:Annotation[on]]">
+<$vars message_id=$message_id$>
+<$button>
+Annotate
+<$action-setfield 
+$tiddler=<<annotation-tiddler>> 
+tags="Annotation" 
+color="green"
+chatarchivist="annotation"
+message-timestamp=<<message_id>>/>
+<$action-sendmessage $message="tm-edit-tiddler" $param=<<annotation-tiddler>>/>
+</$button>
+<div class="annotation">
+<$transclude tiddler=<<annotation-tiddler>> mode="block"/>
+</div>
+
+
+
+\end
+
+```
+<$macrocall $name="annotate" message_id="20240603144334770"/>
+```
+
+<$macrocall $name="annotate" message_.id="20240603144334770"/>

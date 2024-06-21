@@ -1,0 +1,10 @@
+created: 20240620190903912
+list: conv1ac6d0d7-ec63-417b-a572-71faea5fd599_msg2_3c713873-22db-4940-93f2-fb94d1a623f9 conv1ac6d0d7-ec63-417b-a572-71faea5fd599_msg3_10f77a33-f00e-48be-bcc0-ade7e6e36cd3
+modified: 20240620193924433
+title: Selected Messages
+type: text/vnd.tiddlywiki
+
+<$list filter="[list[$:/chatarchivist/selected-messages]]">
+<$link/>
+<br>
+</$list>

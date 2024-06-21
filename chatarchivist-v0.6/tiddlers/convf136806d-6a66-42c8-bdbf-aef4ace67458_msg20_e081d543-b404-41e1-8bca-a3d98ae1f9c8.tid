@@ -1,0 +1,85 @@
+author: assistant
+conversation_id: f136806d-6a66-42c8-bdbf-aef4ace67458
+message_id: e081d543-b404-41e1-8bca-a3d98ae1f9c8
+tags: chatgptmessage
+timestamp: 202406051936140000
+title: convf136806d-6a66-42c8-bdbf-aef4ace67458_msg20_e081d543-b404-41e1-8bca-a3d98ae1f9c8
+type: text/vnd.tiddlywiki
+
+To accomplish this, we'll modify the script to open a zip file, extract its contents, organize the JSON files into folders with the date format specified, and then process each JSON file. Here's the updated script:
+
+```python
+import json
+import uuid
+import sys
+import os
+from zipfile import ZipFile
+
+def process_exported_json(input_file, output_dir):
+    with ZipFile(input_file, 'r') as zip_ref:
+        zip_ref.extractall(output_dir)
+
+    for root, dirs, files in os.walk(output_dir):
+        for file in files:
+            if file.endswith('.json'):
+                json_file_path = os.path.join(root, file)
+                with open(json_file_path, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+
+                # Generate a single conversation ID
+                conversation_id = str(uuid.uuid4())[:8] + '-' + str(uuid.uuid4())[9:13] + '-' + str(uuid.uuid4())[14:18] + '-' + str(uuid.uuid4())[19:23] + '-' + str(uuid.uuid4())[24:]
+
+                # Create a tiddler representing the conversation
+                conversation_tiddler = {
+                    'title': conversation_id,
+                    'tags': 'chatgptconversation',
+                    'chatgptelement': 'conversation',
+                    'conversation_title': data['title']
+                }
+                tiddlers = [conversation_tiddler]
+
+                for i, (node_id, node_data) in enumerate(data['mapping'].items(), start=1):
+                    message = node_data['message']
+                    if message and message['create_time'] is not None:
+                        message_id = str(uuid.uuid4())[:8] + '-' + str(uuid.uuid4())[9:13] + '-' + str(uuid.uuid4())[14:18] + '-' + str(uuid.uuid4())[19:23] + '-' + str(uuid.uuid4())[24:]
+                        timestamp = str(int(message['create_time'] * 1000))  # Convert to milliseconds
+                        title = f"conv{conversation_id}_msg{i}_{message_id}"
+
+                        tiddler = {
+                            'title': title,
+                            'text': message['content']['parts'][0],
+                            'author': message['author']['role'],
+                            'conversation_id': conversation_id,  # Use the same conversation ID for all messages
+                            'message_id': message_id,
+                            'tags': 'chatgptmessage',
+                            'timestamp': timestamp
+                        }
+                        tiddlers.append(tiddler)
+
+                output_filename = os.path.join(output_dir, 'processed_data.json')
+                with open(output_filename, 'w', encoding='utf-8') as f:
+                    json.dump(tiddlers, f, indent=4)
+
+                # Remove the processed JSON file
+                os.remove(json_file_path)
+
+if __name__ == "__main__":
+    if len(sys.argv) != 3:
+        print("Usage: python import_json.py <input_zip_file> <output_directory>")
+        sys.exit(1)
+
+    input_file = sys.argv[1]
+    output_dir = sys.argv[2]
+
+    if not os.path.isfile(input_file):
+        print(f"Error: Input file '{input_file}' does not exist.")
+        sys.exit(1)
+
+    if not os.path.isdir(output_dir):
+        print(f"Error: Output directory '{output_dir}' does not exist.")
+        sys.exit(1)
+
+    process_exported_json(input_file, output_dir)
+```
+
+This script will unzip the provided zip file, organize the JSON files into folders based on the date format you specified, process each JSON file, and then remove the processed JSON files from the folders.

@@ -1,0 +1,17 @@
+author: user
+conversation_id: fbcbcfd8-e57c-4f5d-ac88-a074cd480873
+message_id: 19db9bba-0619-4df3-b0ab-e93f7948833d
+tags: chatgptmessage
+timestamp: 202406141449370000
+title: convfbcbcfd8-e57c-4f5d-ac88-a074cd480873_msg9_19db9bba-0619-4df3-b0ab-e93f7948833d
+type: text/vnd.tiddlywiki
+
+hamma@AndrewsPC:~/surp$ python3 openai_import.py 222c1974bdfdd43aa2a89a5f80e60401a7844dc11bda53286e99eba8a3b338c9-2024-06-13-20-01-17.zip /home/hamma/surp
+Traceback (most recent call last):
+  File "/home/hamma/surp/openai_import.py", line 87, in <module>
+    output_file_path = extract_and_convert_conversations(zip_file_path, output_dir)
+  File "/home/hamma/surp/openai_import.py", line 63, in extract_and_convert_conversations
+    tiddlers = process_conversation_file(conversations)
+  File "/home/hamma/surp/openai_import.py", line 30, in process_conversation_file
+    'conversation_title': conversation.get('title', 'UnknownTitle')
+AttributeError: 'str' object has no attribute 'get'

@@ -1,0 +1,7 @@
+created: 20240606193231214
+modified: 20240606193330302
+tags: 
+title: Apply-Template-B
+
+<$action-setfield $tiddler="$:/temp/filteredTiddlers" view-template="$:/plugins/chatarchivist/templates/conversation-adding-images"/>
+<$action-sendmessage $message="tm-edit-tiddler" $param="$:/temp/filteredTiddlers"/>

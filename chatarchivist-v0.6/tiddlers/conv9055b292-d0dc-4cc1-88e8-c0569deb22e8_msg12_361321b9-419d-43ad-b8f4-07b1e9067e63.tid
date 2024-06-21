@@ -1,0 +1,12 @@
+author: user
+conversation_id: 9055b292-d0dc-4cc1-88e8-c0569deb22e8
+message_id: 361321b9-419d-43ad-b8f4-07b1e9067e63
+tags: chatgptmessage
+timestamp: 202406141517430000
+title: conv9055b292-d0dc-4cc1-88e8-c0569deb22e8_msg12_361321b9-419d-43ad-b8f4-07b1e9067e63
+type: text/vnd.tiddlywiki
+
+hamma@AndrewsPC:~/surp$ python3 superpower_import.py 2024-06-14-conversations.zip /home/hamma/surp conv.json
+Invalid message data found in node_id 0acff3fb-d890-4bcd-acce-80140cdbe2c3 for file 2024-6-14/10-39-53-Model_Training_Instructions.json
+Node data: {'children': ['556ba96d-8cdd-46a5-8835-f2db0f133491'], 'id': '0acff3fb-d890-4bcd-acce-80140cdbe2c3', 'message': None, 'parent': None}
+Invalid timestamp found in node_id 556ba96d-8cdd-46a5-8835-f2db0f133491 for file 2024-6-14/10-39-53-Model_Training_Instructions.json

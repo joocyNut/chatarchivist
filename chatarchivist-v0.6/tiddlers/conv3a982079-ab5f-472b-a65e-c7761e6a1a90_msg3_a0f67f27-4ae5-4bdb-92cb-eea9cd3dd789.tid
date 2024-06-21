@@ -1,0 +1,16 @@
+author: assistant
+conversation_id: 3a982079-ab5f-472b-a65e-c7761e6a1a90
+message_id: a0f67f27-4ae5-4bdb-92cb-eea9cd3dd789
+tags: chatgptmessage
+timestamp: 202406031817280000
+title: conv3a982079-ab5f-472b-a65e-c7761e6a1a90_msg3_a0f67f27-4ae5-4bdb-92cb-eea9cd3dd789
+type: text/vnd.tiddlywiki
+
+It seems like there's a small issue with the syntax. Let's fix that. Update the line where you're displaying the count to ensure that the value of `SearchFor` is properly substituted:
+
+```html
+Found <$count filter="[conversation-hub]search:text<searchfor>sort[title]each[conversation_id]"/>
+with "<$text text=SearchFor$>"
+```
+
+Here, we're using `<$text text=SearchFor$>` to correctly display the value of the `SearchFor` tiddler. This should resolve the issue and display the count properly.

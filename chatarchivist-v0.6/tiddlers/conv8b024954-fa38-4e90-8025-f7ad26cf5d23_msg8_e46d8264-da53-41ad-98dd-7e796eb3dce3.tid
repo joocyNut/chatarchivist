@@ -1,0 +1,66 @@
+author: assistant
+conversation_id: 8b024954-fa38-4e90-8025-f7ad26cf5d23
+message_id: e46d8264-da53-41ad-98dd-7e796eb3dce3
+tags: chatgptmessage
+timestamp: 202406051853430000
+title: conv8b024954-fa38-4e90-8025-f7ad26cf5d23_msg8_e46d8264-da53-41ad-98dd-7e796eb3dce3
+type: text/vnd.tiddlywiki
+
+It seems I misunderstood your requirement earlier. If you want the script to create "tiddlers" for import into a tool like TiddlyWiki, we need to format the output JSON accordingly. TiddlyWiki expects a specific format where each message is a separate tiddler. Let me adjust the script to generate output in that format:
+
+```python
+import json
+import uuid
+import sys
+import os
+
+def process_exported_json(input_file, output_dir):
+    with open(input_file, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+
+    tiddlers = []
+
+    for node_id, node_data in data['mapping'].items():
+        message = node_data['message']
+        if message:
+            tiddler = {
+                'title': f"conv{data['id']}_msg{message['id']}_{str(uuid.uuid4())}",
+                'text': message['content']['parts'][0],
+                'author': message['author']['role'],
+                'conversation_id': data['id'],
+                'message_id': str(uuid.uuid4()),
+                'tags': 'chatgptmessage',
+                'timestamp': message['create_time']
+            }
+            tiddlers.append(tiddler)
+
+    output_filename = os.path.join(output_dir, 'processed_data.json')
+    with open(output_filename, 'w', encoding='utf-8') as f:
+        json.dump(tiddlers, f, indent=4)
+
+if __name__ == "__main__":
+    if len(sys.argv) != 3:
+        print("Usage: python import_json.py <input_json_file> <output_directory>")
+        sys.exit(1)
+
+    input_file = sys.argv[1]
+    output_dir = sys.argv[2]
+
+    if not os.path.isfile(input_file):
+        print(f"Error: Input file '{input_file}' does not exist.")
+        sys.exit(1)
+
+    if not os.path.isdir(output_dir):
+        print(f"Error: Output directory '{output_dir}' does not exist.")
+        sys.exit(1)
+
+    process_exported_json(input_file, output_dir)
+```
+
+This script generates each message as a separate tiddler with the required fields. Run it with the same command as before:
+
+```
+python3 import_json.py 14-47-31-New_chat.json /home/hamma
+```
+
+This should create a JSON file in the specified output directory, with each message formatted as a separate tiddler for import into TiddlyWiki.

@@ -1,0 +1,117 @@
+author: assistant
+conversation_id: 80de3e47-0f2a-4053-b6ee-83a6b6e7cf8d
+message_id: 5c1fd824-9a96-4b26-925e-68660bf02c9b
+tags: chatgptmessage
+timestamp: 202406141520250000
+title: conv80de3e47-0f2a-4053-b6ee-83a6b6e7cf8d_msg14_5c1fd824-9a96-4b26-925e-68660bf02c9b
+type: text/vnd.tiddlywiki
+
+Certainly! Here's the entire script with some modifications to include error handling and logging for better debugging:
+
+```python
+import json
+import uuid
+import sys
+import os
+import zipfile
+from datetime import datetime
+
+def format_timestamp(unix_timestamp):
+    try:
+        # Convert Unix timestamp to datetime object
+        dt_object = datetime.utcfromtimestamp(unix_timestamp)
+        # Format the datetime object
+        formatted_timestamp = dt_object.strftime('%Y%m%d%H%M%S')
+        return formatted_timestamp
+    except ValueError as e:
+        print(f"Error converting timestamp {unix_timestamp}: {e}")
+        return None  # Handle the error gracefully
+
+def process_exported_json(data, filename):
+    tiddlers = []
+
+    conversation_id = str(uuid.uuid4())
+
+    conversation_tiddler = {
+        'title': conversation_id,
+        'tags': 'chatgptconversation',
+        'chatgptelement': 'conversation',
+        'conversation_title': data['title'] if 'title' in data else filename
+    }
+    tiddlers.append(conversation_tiddler)
+
+    for i, (node_id, node_data) in enumerate(data.get('mapping', {}).items(), start=1):
+        message = node_data.get('message', {})
+        if message and message.get('create_time') is not None:
+            message_id = str(uuid.uuid4())
+            timestamp = message['create_time']
+            
+            formatted_timestamp = format_timestamp(timestamp)
+            if formatted_timestamp is None:
+                continue  # Skip this message if timestamp conversion fails
+            
+            title = f"conv{conversation_id}_msg{i}_{message_id}"
+
+            tiddler = {
+                'title': title,
+                'text': message.get('content', {}).get('parts', [''])[0],
+                'author': message.get('author', {}).get('role', 'unknown'),
+                'conversation_id': conversation_id,
+                'message_id': message_id,
+                'tags': 'chatgptmessage',
+                'timestamp': formatted_timestamp
+            }
+            tiddlers.append(tiddler)
+    
+    return tiddlers
+
+def process_zip_and_exported_json(zip_filepath, output_dir, output_file):
+    all_tiddlers = []  # Accumulate tiddlers from all files
+    with zipfile.ZipFile(zip_filepath, 'r') as zip_ref:
+        for filename in zip_ref.namelist():
+            if filename.endswith('.json'):
+                with zip_ref.open(filename) as json_file:
+                    try:
+                        data = json.load(json_file)
+                        tiddlers = process_exported_json(data, filename)
+                        all_tiddlers.extend(tiddlers)
+                    except json.JSONDecodeError as e:
+                        print(f"Error loading JSON from {filename}: {e}")
+                        continue  # Skip this file if JSON decoding fails
+
+    # Write the combined output directly to the specified directory
+    output_filename = os.path.join(output_dir, output_file)
+    with open(output_filename, 'w', encoding='utf-8') as f:
+        json.dump(all_tiddlers, f, indent=4)
+
+if __name__ == "__main__":
+    if len(sys.argv) != 4:
+        print("Usage: python import_json.py <input_zip_file> <output_directory> <output_file>")
+        sys.exit(1)
+
+    zip_filepath = sys.argv[1]
+    output_dir = sys.argv[2]
+    output_file = sys.argv[3]
+
+    if not os.path.isfile(zip_filepath):
+        print(f"Error: Input zip file '{zip_filepath}' does not exist.")
+        sys.exit(1)
+
+    os.makedirs(output_dir, exist_ok=True)
+
+    process_zip_and_exported_json(zip_filepath, output_dir, output_file)
+```
+
+### Key Modifications:
+
+1. **Error Handling in `format_timestamp`**: Added a try-except block to catch `ValueError` exceptions when converting timestamps. This ensures that if an invalid timestamp is encountered, the function returns `None`.
+
+2. **Error Handling in `process_exported_json`**: Added a check to skip processing messages if their timestamp couldn't be converted successfully (`formatted_timestamp is None`).
+
+3. **JSON Decoding Error Handling**: Added a try-except block around `json.load(json_file)` in `process_zip_and_exported_json` to handle potential JSON decoding errors. If decoding fails for any JSON file within the ZIP, it prints an error message and skips that file.
+
+4. **Logging**: Added print statements for error messages during JSON decoding and timestamp conversion for better debugging.
+
+5. **Overall Structure**: Ensured that the script checks for the correct number of command-line arguments, creates the output directory if it doesn't exist, and processes each JSON file within the specified ZIP archive.
+
+These modifications should help in identifying and handling errors gracefully while processing your JSON data from the ZIP file. Adjust error handling strategies further based on specific requirements or edge cases you encounter.

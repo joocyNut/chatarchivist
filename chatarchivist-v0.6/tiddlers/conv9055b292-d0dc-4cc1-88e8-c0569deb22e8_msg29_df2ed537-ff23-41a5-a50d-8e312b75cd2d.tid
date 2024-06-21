@@ -1,0 +1,125 @@
+author: assistant
+conversation_id: 9055b292-d0dc-4cc1-88e8-c0569deb22e8
+message_id: df2ed537-ff23-41a5-a50d-8e312b75cd2d
+tags: chatgptmessage
+timestamp: 202406141513030000
+title: conv9055b292-d0dc-4cc1-88e8-c0569deb22e8_msg29_df2ed537-ff23-41a5-a50d-8e312b75cd2d
+type: text/vnd.tiddlywiki
+
+To format the timestamp considering it's provided in seconds since the UNIX epoch and also include milliseconds, you'll need to adjust the `format_timestamp` function to correctly handle both parts. Here’s how you can modify the function:
+
+```python
+import json
+import uuid
+import sys
+import os
+import zipfile
+from datetime import datetime
+
+def format_timestamp(unix_timestamp):
+    try:
+        # Extract milliseconds from the timestamp
+        milliseconds = int((unix_timestamp - int(unix_timestamp)) * 1000)
+        # Convert Unix timestamp to datetime object
+        dt_object = datetime.utcfromtimestamp(unix_timestamp)
+        # Format the datetime object with milliseconds
+        formatted_timestamp = dt_object.strftime('%Y%m%d%H%M%S') + f"{milliseconds:03d}"
+        return formatted_timestamp
+    except ValueError as e:
+        print(f"Error converting timestamp {unix_timestamp}: {e}")
+        return None
+
+def process_exported_json(data, filename):
+    tiddlers = []
+
+    conversation_id = str(uuid.uuid4())
+
+    conversation_tiddler = {
+        'title': conversation_id,
+        'tags': 'chatgptconversation',
+        'chatgptelement': 'conversation',
+        'conversation_title': data['title'] if 'title' in data else filename
+    }
+    tiddlers.append(conversation_tiddler)
+
+    for i, (node_id, node_data) in enumerate(data.get('mapping', {}).items(), start=1):
+        message = node_data.get('message', {})
+        if message and message.get('create_time') is not None:
+            message_id = str(uuid.uuid4())
+            timestamp = message['create_time']
+            formatted_timestamp = format_timestamp(timestamp)
+            if formatted_timestamp is None:
+                continue  # Skip this message if timestamp cannot be formatted
+            title = f"conv{conversation_id}_msg{i}_{message_id}"
+
+            tiddler = {
+                'title': title,
+                'text': message.get('content', {}).get('parts', [''])[0],
+                'author': message.get('author', {}).get('role', 'unknown'),
+                'conversation_id': conversation_id,
+                'message_id': message_id,
+                'tags': 'chatgptmessage',
+                'timestamp': formatted_timestamp
+            }
+            tiddlers.append(tiddler)
+    
+    return tiddlers
+
+def process_zip_and_exported_json(zip_filepath, output_dir, output_file):
+    all_tiddlers = []  # Accumulate tiddlers from all files
+    with zipfile.ZipFile(zip_filepath, 'r') as zip_ref:
+        for filename in zip_ref.namelist():
+            if filename.endswith('.json'):
+                with zip_ref.open(filename) as json_file:
+                    data = json.load(json_file)
+                    tiddlers = process_exported_json(data, filename)
+                    all_tiddlers.extend(tiddlers)
+
+    # Write the combined output directly to the specified directory
+    output_filename = os.path.join(output_dir, output_file)
+    with open(output_filename, 'w', encoding='utf-8') as f:
+        json.dump(all_tiddlers, f, indent=4)
+
+if __name__ == "__main__":
+    if len(sys.argv) != 4:
+        print("Usage: python import_json.py <input_zip_file> <output_directory> <output_file>")
+        sys.exit(1)
+
+    zip_filepath = sys.argv[1]
+    output_dir = sys.argv[2]
+    output_file = sys.argv[3]
+
+    if not os.path.isfile(zip_filepath):
+        print(f"Error: Input zip file '{zip_filepath}' does not exist.")
+        sys.exit(1)
+
+    os.makedirs(output_dir, exist_ok=True)
+
+    process_zip_and_exported_json(zip_filepath, output_dir, output_file)
+```
+
+### Explanation:
+
+1. **`format_timestamp` Function**:
+   - `unix_timestamp - int(unix_timestamp)` extracts the fractional part of the timestamp, which represents milliseconds.
+   - Multiply this fractional part by 1000 to convert it into milliseconds.
+   - Use `datetime.utcfromtimestamp(unix_timestamp)` to convert the integer part of `unix_timestamp` (seconds since epoch) to a `datetime` object.
+   - Format the `datetime` object using `strftime('%Y%m%d%H%M%S')` to get the formatted date and time.
+   - Concatenate the milliseconds to the formatted date and time to get the final timestamp in `YYYYMMDDHHMMSSmmm` format.
+
+2. **Main Script**:
+   - The rest of the script remains unchanged, ensuring that the `process_exported_json` function correctly processes the JSON data and generates the desired output.
+
+### Usage:
+
+To use the script, run it from the command line with three arguments:
+
+```bash
+python3 superpower_import.py 2024-06-14-conversations.zip /home/hamma/surp conv.json
+```
+
+- `<input_zip_file>`: Path to the zip file containing JSON data.
+- `<output_directory>`: Directory where the output JSON file will be written.
+- `<output_file>`: Name of the output JSON file.
+
+Ensure that Python 3.x is installed and accessible from your command line environment. This script will now correctly format timestamps in the `YYYYMMDDHHMMSSmmm` format, where `mmm` represents milliseconds, based on the timestamps provided in seconds since the UNIX epoch within your JSON data.

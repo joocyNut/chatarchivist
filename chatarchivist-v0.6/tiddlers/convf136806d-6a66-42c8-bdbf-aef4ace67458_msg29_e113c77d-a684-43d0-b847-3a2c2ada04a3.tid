@@ -1,0 +1,17 @@
+author: user
+conversation_id: f136806d-6a66-42c8-bdbf-aef4ace67458
+message_id: e113c77d-a684-43d0-b847-3a2c2ada04a3
+tags: chatgptmessage
+timestamp: 202406051941470000
+title: convf136806d-6a66-42c8-bdbf-aef4ace67458_msg29_e113c77d-a684-43d0-b847-3a2c2ada04a3
+type: text/vnd.tiddlywiki
+
+hamma@AndrewsPC:~$ python3 import_json.py 2024-06-05-conversations.zip /home/hamma
+Traceback (most recent call last):
+  File "/home/hamma/import_json.py", line 84, in <module>
+    process_exported_json(input_file, output_dir)
+  File "/home/hamma/import_json.py", line 22, in process_exported_json
+    process_conversation(item, tiddlers)
+  File "/home/hamma/import_json.py", line 38, in process_conversation
+    conversation_title = data.get('title', '')
+AttributeError: 'str' object has no attribute 'get'

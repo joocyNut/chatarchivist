@@ -1,0 +1,6 @@
+created: 20240606193004256
+modified: 20240606193035622
+tags: 
+title: Apply View Template A
+
+<$button actions="apply-template-a">Apply View Template A</$button>

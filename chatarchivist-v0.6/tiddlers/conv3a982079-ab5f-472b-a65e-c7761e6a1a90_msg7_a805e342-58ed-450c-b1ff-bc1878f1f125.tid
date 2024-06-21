@@ -1,0 +1,20 @@
+author: user
+conversation_id: 3a982079-ab5f-472b-a65e-c7761e6a1a90
+message_id: a805e342-58ed-450c-b1ff-bc1878f1f125
+tags: chatgptmessage
+timestamp: 202406031816290000
+title: conv3a982079-ab5f-472b-a65e-c7761e6a1a90_msg7_a805e342-58ed-450c-b1ff-bc1878f1f125
+type: text/vnd.tiddlywiki
+
+<p>Start typing to search for in message text (prompt or response)</p>
+<$edit-text tiddler="SearchFor" field="text"/><p/>
+<$vars searchfor=>
+Found <$count filter="[tag[chatgptmessage]search:text<searchfor>sort[title]each[conversation_id]]"/>
+with ""
+<hr>
+<$list filter="[tag[chatgptmessage]search:text<searchfor>sort[title]each[conversation_id]]">
+<b><$view field="conversation_title" tiddler=/></b>
+<$link>Message</$link> 
+<$link to=>Conversation</$link><hr>
+</$list>
+</$vars> I need this code with the tags from the templates I provided

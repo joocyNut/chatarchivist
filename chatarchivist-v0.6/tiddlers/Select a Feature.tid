@@ -1,0 +1,13 @@
+created: 20240604190738804
+modified: 20240605161241126
+tags: 
+title: Select a Feature
+
+<$select tiddler='Selected Feature'>
+<$list filter='[tag[Feature]]'>
+<option><$view field='title'/></option>
+</$list>
+</$select>
+<$tiddler tiddler={{Selected Feature}}>
+<$transclude mode='block'/>
+</$tiddler>

@@ -1,0 +1,97 @@
+author: user
+conversation_id: 9595600a-f9cc-4ae0-9747-4bdf4aa204b3
+message_id: 4bdd8d82-1a08-44b4-b3f5-954bb7ede0d4
+tags: chatgptmessage
+timestamp: 202406101511150000
+title: conv9595600a-f9cc-4ae0-9747-4bdf4aa204b3_msg9_4bdd8d82-1a08-44b4-b3f5-954bb7ede0d4
+type: text/vnd.tiddlywiki
+
+import json
+import os
+from zipfile import ZipFile
+from datetime import datetime, timezone
+import sys
+import hashlib
+
+def format_tiddlywiki_date(epoch_time):
+    '''Convert epoch time to TiddlyWiki date format YYYYMMDDhhmmssss, using timezone-aware datetime.'''
+    return datetime.fromtimestamp(epoch_time, timezone.utc).strftime('%Y%m%d%H%M%S0000')
+
+def generate_file_hash(file_name):
+    '''Generate a hash for the file name as an additional unique identifier.'''
+    return hashlib.md5(file_name.encode('utf-8')).hexdigest()
+
+def process_conversation_file(zip_ref, file_info, conversation_id):
+    '''Process a single conversation JSON file from a zip.'''
+    tiddlers = []
+    file_name = os.path.basename(file_info.filename)
+    file_hash = generate_file_hash(file_name)
+    
+    with zip_ref.open(file_info) as file:
+        json_content = json.load(file)
+
+    conversation_title = json_content.get('title', 'UnknownTitle')
+    conversation_template = json_content.get('conversation_template_id', 'UnknownTemplate')
+
+    for message_key, message_value in json_content.get('mapping', {}).items():
+        message = message_value.get('message')
+        if message and isinstance(message, dict):
+            create_time = message.get('create_time')
+            content = message.get('content', {})
+            parts = content.get('parts', [])
+            text_parts = []
+            for part in parts:
+                if isinstance(part, str):
+                    text_parts.append(part)
+                elif isinstance(part, dict):  # Handle dict within parts
+                    text_parts.append(json.dumps(part))  # Convert dict to string
+                # Add more conditions as necessary for other data types
+            if create_time and text_parts:
+                tiddler = {
+                    'title': message_key,
+                    'text': ' '.join(text_parts).replace("'", ""),
+                    'tags': ['Conversation'],
+                    'date': format_tiddlywiki_date(create_time),
+                    'message-type': 'response' if message.get('author', {}).get('role') == 'assistant' else 'prompt',
+                    'conversation_id': conversation_id,
+                    'conversation_title': conversation_title,
+                    'conversation_template': conversation_template,
+                    'file_hash': file_hash
+                }
+                tiddlers.append(tiddler)
+    return tiddlers
+
+def extract_and_convert_conversations(zip_path, output_directory):
+    '''Extract conversations from a zip file and convert to TiddlyWiki format.'''
+    all_tiddlers = []
+    with ZipFile(zip_path, 'r') as zip_ref:
+        for file_info in zip_ref.infolist():
+            if file_info.filename.endswith('.json'):
+                conversation_id = os.path.basename(os.path.dirname(file_info.filename))
+                all_tiddlers.extend(process_conversation_file(zip_ref, file_info, conversation_id))
+
+    if not os.path.exists(output_directory):
+        os.makedirs(output_directory)
+    
+    output_path = os.path.join(output_directory, 'all_conversations_tiddlywiki.json')
+    with open(output_path, 'w') as outfile:
+        json.dump(all_tiddlers, outfile)
+    
+    return output_path
+
+if len(sys.argv) >= 3:
+    zip_file_path = sys.argv[1]
+    output_dir = sys.argv[2]
+    output_file_path = extract_and_convert_conversations(zip_file_path, output_dir)
+    print(f'Conversations extracted and saved to {output_file_path}')
+else:
+    print('Usage: python script.py <path_to_zip_file> <output_directory>')
+gives this errorhamma@AndrewsPC:~/surp$ python3 openai_import.py /home/hamma/surp/222c1974bdfdd43aa2a89a5f80e60401a7844dc11bda53286e99eba8a3b338c9-2024-06-10-14-55-56.zip /home/hamma/surp
+Traceback (most recent call last):
+  File "/home/hamma/surp/openai_import.py", line 77, in <module>
+    output_file_path = extract_and_convert_conversations(zip_file_path, output_dir)
+  File "/home/hamma/surp/openai_import.py", line 63, in extract_and_convert_conversations
+    all_tiddlers.extend(process_conversation_file(zip_ref, file_info, conversation_id))
+  File "/home/hamma/surp/openai_import.py", line 25, in process_conversation_file
+    conversation_title = json_content.get('title', 'UnknownTitle')
+AttributeError: 'list' object has no attribute 'get'

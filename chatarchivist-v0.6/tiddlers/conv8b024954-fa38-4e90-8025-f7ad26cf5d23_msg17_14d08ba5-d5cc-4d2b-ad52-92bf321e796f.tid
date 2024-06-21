@@ -1,0 +1,46 @@
+author: assistant
+conversation_id: 8b024954-fa38-4e90-8025-f7ad26cf5d23
+message_id: 14d08ba5-d5cc-4d2b-ad52-92bf321e796f
+tags: chatgptmessage
+timestamp: 202406051847360000
+title: conv8b024954-fa38-4e90-8025-f7ad26cf5d23_msg17_14d08ba5-d5cc-4d2b-ad52-92bf321e796f
+type: text/vnd.tiddlywiki
+
+Sure, here's a Python script that accomplishes what you described:
+
+```python
+import json
+import uuid
+
+def process_exported_json(input_file, output_file):
+    with open(input_file, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+
+    conversations = data['conversations']
+    new_messages = []
+
+    for conversation in conversations:
+        conversation_id = conversation['id']
+        for message in conversation['messages']:
+            new_message = {
+                'author': 'user' if message['role'] == 'user' else 'assistant',
+                'conversation_id': conversation_id,
+                'message_id': str(uuid.uuid4()),
+                'tags': 'chatgptmessage',
+                'timestamp': message['timestamp'],
+                'title': f"conv{conversation_id}_msg{message['id']}_{str(uuid.uuid4())}"
+            }
+            new_messages.append(new_message)
+
+    output_data = {'messages': new_messages}
+
+    with open(output_file, 'w', encoding='utf-8') as f:
+        json.dump(output_data, f, indent=4)
+
+# Example usage
+input_file = 'exported_data.json'
+output_file = 'processed_data.json'
+process_exported_json(input_file, output_file)
+```
+
+This script reads the exported JSON file, processes each message, and creates a new JSON file with the desired fields added to each message. It assigns a unique `message_id` using `uuid`, adds the `author` field based on the original role, and constructs the `title` field according to your specified format.

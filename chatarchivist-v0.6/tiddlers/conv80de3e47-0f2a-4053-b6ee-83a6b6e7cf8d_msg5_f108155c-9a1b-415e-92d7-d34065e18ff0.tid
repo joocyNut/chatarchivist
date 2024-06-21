@@ -1,0 +1,111 @@
+author: assistant
+conversation_id: 80de3e47-0f2a-4053-b6ee-83a6b6e7cf8d
+message_id: f108155c-9a1b-415e-92d7-d34065e18ff0
+tags: chatgptmessage
+timestamp: 202406141531240000
+title: conv80de3e47-0f2a-4053-b6ee-83a6b6e7cf8d_msg5_f108155c-9a1b-415e-92d7-d34065e18ff0
+type: text/vnd.tiddlywiki
+
+I understand now. You have timestamps in seconds since the UNIX epoch, and you want to ignore the milliseconds part (the last 3 digits) when formatting these timestamps into the TiddlyWiki date format (`YYYYMMDDHHMMSS0000`). Here’s how you can adjust the script to achieve this:
+
+```python
+import json
+import os
+from zipfile import ZipFile
+from datetime import datetime, timezone
+import sys
+import uuid
+
+def format_tiddlywiki_date(epoch_time):
+    '''Convert epoch time (in seconds, with milliseconds as the last 3 digits) to TiddlyWiki date format YYYYMMDDhhmmss0000.'''
+    epoch_seconds = epoch_time // 1000  # Convert milliseconds to seconds
+    return datetime.utcfromtimestamp(epoch_seconds).strftime('%Y%m%d%H%M%S0000')
+
+def process_exported_json(data, filename):
+    tiddlers = []
+
+    conversation_id = str(uuid.uuid4())
+
+    conversation_tiddler = {
+        'title': conversation_id,
+        'tags': 'chatgptconversation',
+        'chatgptelement': 'conversation',
+        'conversation_title': data.get('title', 'UnknownTitle')
+    }
+    tiddlers.append(conversation_tiddler)
+
+    for i, (node_id, node_data) in enumerate(data.get('mapping', {}).items(), start=1):
+        message = node_data.get('message', {})
+        if message and message.get('create_time') is not None:
+            message_id = str(uuid.uuid4())
+            timestamp = message['create_time']
+            
+            formatted_timestamp = format_tiddlywiki_date(timestamp)
+            if formatted_timestamp is None:
+                continue  # Skip this message if timestamp conversion fails
+            
+            title = f"conv{conversation_id}_msg{i}_{message_id}"
+
+            tiddler = {
+                'title': title,
+                'text': message.get('content', {}).get('parts', [''])[0],
+                'author': message.get('author', {}).get('role', 'unknown'),
+                'conversation_id': conversation_id,
+                'message_id': message_id,
+                'tags': 'chatgptmessage',
+                'timestamp': formatted_timestamp
+            }
+            tiddlers.append(tiddler)
+    
+    return tiddlers
+
+def process_zip_and_exported_json(zip_filepath, output_dir):
+    all_tiddlers = []  # Accumulate tiddlers from all files
+    with ZipFile(zip_filepath, 'r') as zip_ref:
+        for filename in zip_ref.namelist():
+            if filename.endswith('.json'):
+                with zip_ref.open(filename) as json_file:
+                    try:
+                        data = json.load(json_file)
+                        tiddlers = process_exported_json(data, filename)
+                        all_tiddlers.extend(tiddlers)
+                    except json.JSONDecodeError as e:
+                        print(f"Error loading JSON from {filename}: {e}")
+                        continue  # Skip this file if JSON decoding fails
+
+    # Write the combined output directly to the specified directory
+    output_filename = os.path.join(output_dir, 'all_conversations_tiddlywiki.json')
+    with open(output_filename, 'w', encoding='utf-8') as f:
+        json.dump(all_tiddlers, f, indent=4)
+
+    return output_filename
+
+if __name__ == '__main__':
+    if len(sys.argv) != 3:
+        print("Usage: python script.py <path_to_zip_file> <output_directory>")
+        sys.exit(1)
+
+    zip_filepath = sys.argv[1]
+    output_dir = sys.argv[2]
+    
+    if not os.path.isfile(zip_filepath):
+        print(f"Error: Input zip file '{zip_filepath}' does not exist.")
+        sys.exit(1)
+
+    os.makedirs(output_dir, exist_ok=True)
+
+    output_file_path = process_zip_and_exported_json(zip_filepath, output_dir)
+    print(f'Conversations extracted and saved to {output_file_path}')
+```
+
+### Explanation:
+
+- **`format_tiddlywiki_date` Function**: 
+  - It now correctly handles timestamps in seconds since the UNIX epoch. It divides `epoch_time` by 1000 (`epoch_time // 1000`) to drop the milliseconds part (the last 3 digits) before converting to a UTC datetime object.
+  - It then formats the resulting datetime object as `'%Y%m%d%H%M%S0000'`, which includes zeros for milliseconds.
+
+- **Process Functions**:
+  - `process_exported_json`: Processes each JSON file extracted from the ZIP archive, converting timestamps using `format_tiddlywiki_date` as described.
+  - `process_zip_and_exported_json`: Iterates through JSON files within the ZIP archive, accumulates tiddlers (formatted JSON data), and writes them to a JSON file (`all_conversations_tiddlywiki.json`) in the specified `output_dir`.
+
+This adjustment ensures that the timestamps are correctly converted and formatted according to your requirements, ignoring the milliseconds part when formatting. Use this updated script to process your data and generate the desired timestamps in the TiddlyWiki format. Adjust further based on specific data characteristics or additional requirements as needed.

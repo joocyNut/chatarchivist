@@ -1,0 +1,68 @@
+author: assistant
+conversation_id: 8b024954-fa38-4e90-8025-f7ad26cf5d23
+message_id: 378ceb69-e05f-4b10-8505-af098aab3db3
+tags: chatgptmessage
+timestamp: 202406051851100000
+title: conv8b024954-fa38-4e90-8025-f7ad26cf5d23_msg20_378ceb69-e05f-4b10-8505-af098aab3db3
+type: text/vnd.tiddlywiki
+
+It seems like you've directly tried to execute the script with arguments, but it's expecting the input file and output directory to be passed as arguments. Let me modify the script to handle command-line arguments correctly:
+
+```python
+import json
+import uuid
+import sys
+import os
+
+def process_exported_json(input_file, output_dir):
+    with open(input_file, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+
+    conversations = data['conversations']
+    new_messages = []
+
+    for conversation in conversations:
+        conversation_id = conversation['id']
+        for message in conversation['messages']:
+            new_message = {
+                'author': 'user' if message['role'] == 'user' else 'assistant',
+                'conversation_id': conversation_id,
+                'message_id': str(uuid.uuid4()),
+                'tags': 'chatgptmessage',
+                'timestamp': message['timestamp'],
+                'title': f"conv{conversation_id}_msg{message['id']}_{str(uuid.uuid4())}"
+            }
+            new_messages.append(new_message)
+
+    output_data = {'messages': new_messages}
+
+    output_filename = os.path.join(output_dir, 'processed_data.json')
+    with open(output_filename, 'w', encoding='utf-8') as f:
+        json.dump(output_data, f, indent=4)
+
+if __name__ == "__main__":
+    if len(sys.argv) != 3:
+        print("Usage: python import_json.py <input_json_file> <output_directory>")
+        sys.exit(1)
+
+    input_file = sys.argv[1]
+    output_dir = sys.argv[2]
+
+    if not os.path.isfile(input_file):
+        print(f"Error: Input file '{input_file}' does not exist.")
+        sys.exit(1)
+
+    if not os.path.isdir(output_dir):
+        print(f"Error: Output directory '{output_dir}' does not exist.")
+        sys.exit(1)
+
+    process_exported_json(input_file, output_dir)
+```
+
+Now you can execute the script with the input file and output directory as arguments:
+
+```
+python3 import_json.py 14-47-31-New_chat.json /home/hamma
+```
+
+Replace `14-47-31-New_chat.json` with the name of your exported JSON file and `/home/hamma` with the path to the directory where you want to save the processed JSON file.

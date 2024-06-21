@@ -1,0 +1,9 @@
+author: user
+conversation_id: 8b024954-fa38-4e90-8025-f7ad26cf5d23
+message_id: 80e785cc-901b-4555-aa2d-0fbf57a97590
+tags: chatgptmessage
+timestamp: 202406051912540000
+title: conv8b024954-fa38-4e90-8025-f7ad26cf5d23_msg4_80e785cc-901b-4555-aa2d-0fbf57a97590
+type: text/vnd.tiddlywiki
+
+make it so the python script fills in the value of the conversation_id identically for all chatgptmessage tiddlers that are a part of the same chatgptconversation tiddler

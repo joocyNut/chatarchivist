@@ -1,0 +1,75 @@
+author: assistant
+conversation_id: f136806d-6a66-42c8-bdbf-aef4ace67458
+message_id: f1c678f4-8955-4e9e-b0a9-a722c0f22fbf
+tags: chatgptmessage
+timestamp: 202406051917450000
+title: convf136806d-6a66-42c8-bdbf-aef4ace67458_msg26_f1c678f4-8955-4e9e-b0a9-a722c0f22fbf
+type: text/vnd.tiddlywiki
+
+To ensure that the `conversation_id` is identical for all `chatgptmessage` tiddlers associated with the `chatgptconversation` tiddler, we need to generate the `conversation_id` once and use it for all messages within the same conversation. Here's the modified script:
+
+```python
+import json
+import uuid
+import sys
+import os
+
+def process_exported_json(input_file, output_dir):
+    with open(input_file, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+
+    tiddlers = []
+
+    # Create a tiddler representing the conversation
+    conversation_id = str(uuid.uuid4()).replace("-", "")  # Generate conversation ID
+    conversation_tiddler = {
+        'title': data['id'],
+        'tags': 'chatgptconversation',
+        'chatgptelement': 'conversation',
+        'conversation_title': data['title'],
+        'conversation_id': conversation_id  # Assign conversation ID
+    }
+    tiddlers.append(conversation_tiddler)
+
+    for node_id, node_data in data['mapping'].items():
+        message = node_data['message']
+        if message and message['create_time'] is not None:
+            message_id = str(uuid.uuid4()).replace("-", "")
+            timestamp = str(int(message['create_time'] * 1000))  # Convert to milliseconds
+            title = f"conv{conversation_id}_msg{message['id']}_{message_id}"
+
+            tiddler = {
+                'title': title,
+                'text': message['content']['parts'][0],
+                'author': message['author']['role'],
+                'conversation_id': conversation_id,  # Use the same conversation ID
+                'message_id': message_id,
+                'tags': 'chatgptmessage',
+                'timestamp': timestamp
+            }
+            tiddlers.append(tiddler)
+
+    output_filename = os.path.join(output_dir, 'processed_data.json')
+    with open(output_filename, 'w', encoding='utf-8') as f:
+        json.dump(tiddlers, f, indent=4)
+
+if __name__ == "__main__":
+    if len(sys.argv) != 3:
+        print("Usage: python import_json.py <input_json_file> <output_directory>")
+        sys.exit(1)
+
+    input_file = sys.argv[1]
+    output_dir = sys.argv[2]
+
+    if not os.path.isfile(input_file):
+        print(f"Error: Input file '{input_file}' does not exist.")
+        sys.exit(1)
+
+    if not os.path.isdir(output_dir):
+        print(f"Error: Output directory '{output_dir}' does not exist.")
+        sys.exit(1)
+
+    process_exported_json(input_file, output_dir)
+```
+
+This modification ensures that each conversation has a single `conversation_id`, and all messages within that conversation share the same `conversation_id`.

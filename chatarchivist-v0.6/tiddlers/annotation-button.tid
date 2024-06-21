@@ -1,0 +1,21 @@
+chatarchivist: macro
+created: 20240314174025098
+modified: 20240603191154654
+tags: 
+title: annotation-button
+
+\define annotation-tiddler() $(this-tiddler)$-Annotation
+
+<$button>
+<$vars this-tiddler=<<currentTiddler>>>
+<$action-sendmessage $message="tm-new-tiddler" title=<<annotation-tiddler>> tags="Annotation" text=<<now "Today is DDth, MMM YYYY">> chatarchivist="annotation" message-timestamp={{!!timestamp}}/>
+Annotate
+</$vars>
+</$button>
+
+<!--<$action-setfield $tiddler=<<annotation-tiddler>>
+chatarchivist="annotation"
+message-timestamp={{!!timestamp}}
+/>
+<$action-navigate $to=<<annotation-tiddler>>/>
+-->

@@ -1,0 +1,11 @@
+created: 20240107215244345
+description: this is the template used to show annotations when being created or edited
+modified: 20240618183601029
+tags: plugin
+title: annotation-template
+
+<$list filter="[is[current]chatarchivist[annotation]]">
+<div class="message-text">
+<$transclude tiddler={{!!message-timestamp}} mode="block"/>
+</div>
+</$list>

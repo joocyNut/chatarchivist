@@ -1,0 +1,10 @@
+chatarchivist: startup
+code-body: yes
+created: 20230304205744763
+creator: Telumire
+modified: 20240401210637481
+modifier: Telumire
+tags: $:/tags/StartupAction Old
+title: Hide sidebar
+
+<$action-setfield $tiddler="$:/state/sidebar" $value="no"/>

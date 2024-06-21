@@ -1,0 +1,7 @@
+created: 20240606193110392
+modified: 20240606193159798
+tags: 
+title: Apply-Template-A
+
+<$action-setfield $tiddler="$:/temp/filteredTiddlers" view-template="chatgptconversation_template"/>
+<$action-sendmessage $message="tm-edit-tiddler" $param="$:/temp/filteredTiddlers"/>

@@ -1,0 +1,26 @@
+author: assistant
+conversation_id: 3a982079-ab5f-472b-a65e-c7761e6a1a90
+message_id: a5e31911-aa4b-4d9f-a2e6-e7b73ca46bc9
+tags: chatgptmessage
+timestamp: 202406031820160000
+title: conv3a982079-ab5f-472b-a65e-c7761e6a1a90_msg8_a5e31911-aa4b-4d9f-a2e6-e7b73ca46bc9
+type: text/vnd.tiddlywiki
+
+Sure, here's the modified code that allows you to search for conversation titles based on the provided template:
+
+```html
+<p>Start typing to search for conversation titles</p>
+<$edit-text tiddler="SearchFor" field="text"/><p/>
+<$vars searchfor=SearchFor>
+Found <$count filter="[tag[chatgptmessage]search:text<searchfor>sort[title]each[conversation_id]]"/>
+with "<$text text=SearchFor$>"
+<hr>
+<$list filter="[tag[chatgptmessage]search:text<searchfor>sort[title]each[conversation_id]]">
+    <b><$view field="conversation_title"/></b>
+    <$link>Message</$link> 
+    <$link to=<<currentTiddler>>>Conversation</$link><hr>
+</$list>
+</$vars>
+```
+
+This code snippet allows users to search for conversation titles based on the provided template. It displays the count of conversations found with the searched title and provides links to the corresponding messages and conversations.

@@ -1,0 +1,118 @@
+author: assistant
+conversation_id: 80de3e47-0f2a-4053-b6ee-83a6b6e7cf8d
+message_id: 29b32849-958b-4410-a548-0f53de0c5650
+tags: chatgptmessage
+timestamp: 202406141524110000
+title: conv80de3e47-0f2a-4053-b6ee-83a6b6e7cf8d_msg13_29b32849-958b-4410-a548-0f53de0c5650
+type: text/vnd.tiddlywiki
+
+To format the timestamp in your script the same way as in the provided example (`format_tiddlywiki_date` function), you should convert the Unix timestamp to a timezone-aware datetime object in UTC and then format it as `'%Y%m%d%H%M%S0000'`. Here's how you can integrate this approach into your existing script:
+
+```python
+import json
+import os
+from zipfile import ZipFile
+from datetime import datetime, timezone
+import sys
+import uuid
+
+def format_tiddlywiki_date(epoch_time):
+    '''Convert epoch time to TiddlyWiki date format YYYYMMDDhhmmssss, using timezone-aware datetime.'''
+    return datetime.fromtimestamp(epoch_time, timezone.utc).strftime('%Y%m%d%H%M%S0000')
+
+def process_exported_json(data, filename):
+    tiddlers = []
+
+    conversation_id = str(uuid.uuid4())
+
+    conversation_tiddler = {
+        'title': conversation_id,
+        'tags': 'chatgptconversation',
+        'chatgptelement': 'conversation',
+        'conversation_title': data['title'] if 'title' in data else 'UnknownTitle'
+    }
+    tiddlers.append(conversation_tiddler)
+
+    for i, (node_id, node_data) in enumerate(data.get('mapping', {}).items(), start=1):
+        message = node_data.get('message', {})
+        if message and message.get('create_time') is not None:
+            message_id = str(uuid.uuid4())
+            timestamp = message['create_time']
+            
+            formatted_timestamp = format_tiddlywiki_date(timestamp)
+            if formatted_timestamp is None:
+                continue  # Skip this message if timestamp conversion fails
+            
+            title = f"conv{conversation_id}_msg{i}_{message_id}"
+
+            tiddler = {
+                'title': title,
+                'text': message.get('content', {}).get('parts', [''])[0],
+                'author': message.get('author', {}).get('role', 'unknown'),
+                'conversation_id': conversation_id,
+                'message_id': message_id,
+                'tags': 'chatgptmessage',
+                'timestamp': formatted_timestamp
+            }
+            tiddlers.append(tiddler)
+    
+    return tiddlers
+
+def process_zip_and_exported_json(zip_filepath, output_dir):
+    all_tiddlers = []  # Accumulate tiddlers from all files
+    with ZipFile(zip_filepath, 'r') as zip_ref:
+        for filename in zip_ref.namelist():
+            if filename.endswith('.json'):
+                with zip_ref.open(filename) as json_file:
+                    try:
+                        data = json.load(json_file)
+                        tiddlers = process_exported_json(data, filename)
+                        all_tiddlers.extend(tiddlers)
+                    except json.JSONDecodeError as e:
+                        print(f"Error loading JSON from {filename}: {e}")
+                        continue  # Skip this file if JSON decoding fails
+
+    # Write the combined output directly to the specified directory
+    output_filename = os.path.join(output_dir, 'all_conversations_tiddlywiki.json')
+    with open(output_filename, 'w', encoding='utf-8') as f:
+        json.dump(all_tiddlers, f, indent=4)
+
+    return output_filename
+
+if __name__ == '__main__':
+    if len(sys.argv) != 3:
+        print("Usage: python script.py <path_to_zip_file> <output_directory>")
+        sys.exit(1)
+
+    zip_filepath = sys.argv[1]
+    output_dir = sys.argv[2]
+    
+    if not os.path.isfile(zip_filepath):
+        print(f"Error: Input zip file '{zip_filepath}' does not exist.")
+        sys.exit(1)
+
+    os.makedirs(output_dir, exist_ok=True)
+
+    output_file_path = process_zip_and_exported_json(zip_filepath, output_dir)
+    print(f'Conversations extracted and saved to {output_file_path}')
+```
+
+### Explanation:
+
+1. **`format_tiddlywiki_date` Function**: This function converts a Unix timestamp (`epoch_time`) to a timezone-aware UTC datetime object and formats it as `'%Y%m%d%H%M%S0000'`.
+
+2. **`process_exported_json` Function**: 
+   - It processes each JSON file (`data`) extracted from the ZIP archive.
+   - It extracts conversation data and converts timestamps using `format_tiddlywiki_date` to format them as required.
+
+3. **`process_zip_and_exported_json` Function**:
+   - It iterates through JSON files within the ZIP archive, loads each JSON file, and processes it using `process_exported_json`.
+   - Accumulates all tiddlers (formatted JSON data) into `all_tiddlers`.
+   - Finally, it writes all accumulated tiddlers to a JSON file (`all_conversations_tiddlywiki.json`) in the specified `output_dir`.
+
+4. **Command-Line Interface (CLI)**:
+   - It checks for the correct number of command-line arguments (`sys.argv`).
+   - It creates the output directory if it doesn't exist.
+   - It calls `process_zip_and_exported_json` with the provided ZIP file path and output directory.
+
+This structure ensures that your script processes conversation data from a ZIP archive containing JSON files, formats timestamps in the specified TiddlyWiki format, and outputs the formatted data into a single JSON file (`all_conversations_tiddlywiki.json`). Adjust paths and error handling as necessary for your specific use case.

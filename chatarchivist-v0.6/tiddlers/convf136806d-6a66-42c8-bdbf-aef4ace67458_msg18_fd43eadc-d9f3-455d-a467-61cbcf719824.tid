@@ -1,0 +1,68 @@
+author: user
+conversation_id: f136806d-6a66-42c8-bdbf-aef4ace67458
+message_id: fd43eadc-d9f3-455d-a467-61cbcf719824
+tags: chatgptmessage
+timestamp: 202406051917350000
+title: convf136806d-6a66-42c8-bdbf-aef4ace67458_msg18_fd43eadc-d9f3-455d-a467-61cbcf719824
+type: text/vnd.tiddlywiki
+
+rewrite this python script so that the conversation_id is identical for all chatgptmessage tiddlers associated with the chatgptconversation tiddler "import json
+import uuid
+import sys
+import os
+
+def process_exported_json(input_file, output_dir):
+    with open(input_file, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+
+    tiddlers = []
+
+    # Create a tiddler representing the conversation
+    conversation_tiddler = {
+        'title': data['id'],
+        'tags': 'chatgptconversation',
+        'chatgptelement': 'conversation',
+        'conversation_title': data['title']
+    }
+    tiddlers.append(conversation_tiddler)
+
+    for node_id, node_data in data['mapping'].items():
+        message = node_data['message']
+        if message and message['create_time'] is not None:
+            conversation_id = str(uuid.uuid4()).replace("-", "")
+            message_id = str(uuid.uuid4()).replace("-", "")
+            timestamp = str(int(message['create_time'] * 1000))  # Convert to milliseconds
+            title = f"conv{conversation_id}_msg{message['id']}_{message_id}"
+
+            tiddler = {
+                'title': title,
+                'text': message['content']['parts'][0],
+                'author': message['author']['role'],
+                'conversation_id': conversation_id,
+                'message_id': message_id,
+                'tags': 'chatgptmessage',
+                'timestamp': timestamp
+            }
+            tiddlers.append(tiddler)
+
+    output_filename = os.path.join(output_dir, 'processed_data.json')
+    with open(output_filename, 'w', encoding='utf-8') as f:
+        json.dump(tiddlers, f, indent=4)
+
+if __name__ == "__main__":
+    if len(sys.argv) != 3:
+        print("Usage: python import_json.py <input_json_file> <output_directory>")
+        sys.exit(1)
+
+    input_file = sys.argv[1]
+    output_dir = sys.argv[2]
+
+    if not os.path.isfile(input_file):
+        print(f"Error: Input file '{input_file}' does not exist.")
+        sys.exit(1)
+
+    if not os.path.isdir(output_dir):
+        print(f"Error: Output directory '{output_dir}' does not exist.")
+        sys.exit(1)
+
+    process_exported_json(input_file, output_dir)"

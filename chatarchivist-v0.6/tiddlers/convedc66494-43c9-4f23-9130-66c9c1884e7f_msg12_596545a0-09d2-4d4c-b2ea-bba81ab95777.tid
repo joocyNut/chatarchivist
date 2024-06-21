@@ -1,0 +1,9 @@
+author: user
+conversation_id: edc66494-43c9-4f23-9130-66c9c1884e7f
+message_id: 596545a0-09d2-4d4c-b2ea-bba81ab95777
+tags: chatgptmessage
+timestamp: 202405301738510000
+title: convedc66494-43c9-4f23-9130-66c9c1884e7f_msg12_596545a0-09d2-4d4c-b2ea-bba81ab95777
+type: text/vnd.tiddlywiki
+
+write the JS like a tree, where the title of all the conversations is under one umbrella, and each prompt is under the umbrella of each conversation

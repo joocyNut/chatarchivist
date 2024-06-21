@@ -1,0 +1,33 @@
+author: assistant
+conversation_id: 853ae96e-2dec-4c40-be9b-716606019d4e
+message_id: 0d573dd0-92dc-4024-b611-7a06c7770f40
+tags: chatgptmessage
+timestamp: 202406101501040000
+title: conv853ae96e-2dec-4c40-be9b-716606019d4e_msg24_0d573dd0-92dc-4024-b611-7a06c7770f40
+type: text/vnd.tiddlywiki
+
+To format the UNIX timestamps into the specified string format (YYYYMMDDHHMMSS), you can use Python. Here's a script that does that:
+
+```python
+from datetime import datetime
+
+def unix_to_custom_string(unix_time):
+    # Convert UNIX timestamp to datetime object
+    dt_object = datetime.utcfromtimestamp(unix_time)
+    # Format the datetime object to the custom string format
+    custom_string = dt_object.strftime('%Y%m%d%H%M%S')
+    return custom_string
+
+# Sample UNIX timestamps
+create_time = 1718030028.946947
+update_time = 1718031161.8785
+
+# Convert UNIX timestamps to custom string format
+formatted_create_time = unix_to_custom_string(create_time)
+formatted_update_time = unix_to_custom_string(update_time)
+
+print("Formatted create time:", formatted_create_time)
+print("Formatted update time:", formatted_update_time)
+```
+
+This script defines a function `unix_to_custom_string` that takes a UNIX timestamp as input and returns the corresponding string formatted as YYYYMMDDHHMMSS. Then it applies this function to the provided UNIX timestamps `create_time` and `update_time` and prints the formatted strings.

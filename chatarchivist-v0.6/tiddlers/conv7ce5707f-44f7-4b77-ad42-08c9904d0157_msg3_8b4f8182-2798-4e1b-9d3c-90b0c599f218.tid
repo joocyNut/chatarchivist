@@ -1,0 +1,119 @@
+author: assistant
+conversation_id: 7ce5707f-44f7-4b77-ad42-08c9904d0157
+message_id: 8b4f8182-2798-4e1b-9d3c-90b0c599f218
+tags: chatgptmessage
+timestamp: 202406141533360000
+title: conv7ce5707f-44f7-4b77-ad42-08c9904d0157_msg3_8b4f8182-2798-4e1b-9d3c-90b0c599f218
+type: text/vnd.tiddlywiki
+
+The `ValueError: year 56423 is out of range` indicates that the `epoch_time` passed to `format_tiddlywiki_date` is not in the expected format. The `format_tiddlywiki_date` function expects `epoch_time` to be in seconds since the UNIX epoch. However, it seems like `timestamp` in your data might not be in seconds or is not a valid timestamp.
+
+To address this issue and ensure proper handling of timestamps, you can add some debugging output to identify what `timestamp` actually contains and how it should be handled. Here's an updated version of `format_tiddlywiki_date` and `process_exported_json` functions with added debug prints:
+
+```python
+import json
+import os
+from zipfile import ZipFile
+from datetime import datetime, timezone
+import sys
+import uuid
+
+def format_tiddlywiki_date(epoch_time):
+    '''Convert epoch time (in seconds) to TiddlyWiki date format YYYYMMDDhhmmss0000.'''
+    try:
+        return datetime.utcfromtimestamp(epoch_time).strftime('%Y%m%d%H%M%S0000')
+    except ValueError as e:
+        print(f"Error formatting timestamp {epoch_time}: {e}")
+        return None
+
+def process_exported_json(data, filename):
+    tiddlers = []
+
+    conversation_id = str(uuid.uuid4())
+
+    conversation_tiddler = {
+        'title': conversation_id,
+        'tags': 'chatgptconversation',
+        'chatgptelement': 'conversation',
+        'conversation_title': data.get('title', 'UnknownTitle')
+    }
+    tiddlers.append(conversation_tiddler)
+
+    for i, (node_id, node_data) in enumerate(data.get('mapping', {}).items(), start=1):
+        message = node_data.get('message', {})
+        if message and message.get('create_time') is not None:
+            message_id = str(uuid.uuid4())
+            timestamp = message['create_time']
+            
+            print(f"Processing timestamp: {timestamp}")  # Debug print
+            
+            formatted_timestamp = format_tiddlywiki_date(timestamp)
+            if formatted_timestamp is None:
+                continue  # Skip this message if timestamp conversion fails
+            
+            title = f"conv{conversation_id}_msg{i}_{message_id}"
+
+            tiddler = {
+                'title': title,
+                'text': message.get('content', {}).get('parts', [''])[0],
+                'author': message.get('author', {}).get('role', 'unknown'),
+                'conversation_id': conversation_id,
+                'message_id': message_id,
+                'tags': 'chatgptmessage',
+                'timestamp': formatted_timestamp
+            }
+            tiddlers.append(tiddler)
+    
+    return tiddlers
+
+def process_zip_and_exported_json(zip_filepath, output_dir):
+    all_tiddlers = []  # Accumulate tiddlers from all files
+    with ZipFile(zip_filepath, 'r') as zip_ref:
+        for filename in zip_ref.namelist():
+            if filename.endswith('.json'):
+                with zip_ref.open(filename) as json_file:
+                    try:
+                        data = json.load(json_file)
+                        tiddlers = process_exported_json(data, filename)
+                        all_tiddlers.extend(tiddlers)
+                    except json.JSONDecodeError as e:
+                        print(f"Error loading JSON from {filename}: {e}")
+                        continue  # Skip this file if JSON decoding fails
+
+    # Write the combined output directly to the specified directory
+    output_filename = os.path.join(output_dir, 'all_conversations_tiddlywiki.json')
+    with open(output_filename, 'w', encoding='utf-8') as f:
+        json.dump(all_tiddlers, f, indent=4)
+
+    return output_filename
+
+if __name__ == '__main__':
+    if len(sys.argv) != 3:
+        print("Usage: python script.py <path_to_zip_file> <output_directory>")
+        sys.exit(1)
+
+    zip_filepath = sys.argv[1]
+    output_dir = sys.argv[2]
+    
+    if not os.path.isfile(zip_filepath):
+        print(f"Error: Input zip file '{zip_filepath}' does not exist.")
+        sys.exit(1)
+
+    os.makedirs(output_dir, exist_ok=True)
+
+    output_file_path = process_zip_and_exported_json(zip_filepath, output_dir)
+    print(f'Conversations extracted and saved to {output_file_path}')
+```
+
+### Changes Made:
+- **`format_tiddlywiki_date` function:** Wrapped the datetime conversion in a try-except block to catch `ValueError` exceptions. This allows you to print out problematic timestamps for debugging purposes.
+
+- **`process_exported_json` function:** Added a debug print statement to output `timestamp` before attempting to format it. This helps you identify any unexpected values causing the `ValueError`.
+
+### Debugging Steps:
+1. Run your script again with these modifications.
+2. Check the console output for the `Processing timestamp: ...` debug prints.
+3. Identify if any timestamps are not in seconds or are out of the valid range.
+4. Adjust your data processing or timestamp handling logic accordingly based on the debug output.
+
+This approach should help you diagnose and fix the issue related to the timestamp format or value causing the `ValueError`. Adjustments might include verifying the units of the timestamps (seconds vs milliseconds) or ensuring they are within a valid range for UNIX epoch time conversion.

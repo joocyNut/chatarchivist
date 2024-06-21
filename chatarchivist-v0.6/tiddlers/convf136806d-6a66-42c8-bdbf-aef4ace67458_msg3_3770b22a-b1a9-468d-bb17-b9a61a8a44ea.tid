@@ -1,0 +1,96 @@
+author: assistant
+conversation_id: f136806d-6a66-42c8-bdbf-aef4ace67458
+message_id: 3770b22a-b1a9-468d-bb17-b9a61a8a44ea
+tags: chatgptmessage
+timestamp: 202406051940120000
+title: convf136806d-6a66-42c8-bdbf-aef4ace67458_msg3_3770b22a-b1a9-468d-bb17-b9a61a8a44ea
+type: text/vnd.tiddlywiki
+
+It seems like there's an issue with accessing the JSON data after extraction from the zip file. The error message suggests that the `data` variable might be a list instead of a dictionary, leading to an attempt to index it with a string (`data['title']`). 
+
+Let's modify the script to handle the case where `data` is a list by iterating over its elements and processing each one individually. Here's the updated script:
+
+```python
+import json
+import uuid
+import sys
+import os
+from zipfile import ZipFile
+
+def process_exported_json(input_file, output_dir):
+    with ZipFile(input_file, 'r') as zip_ref:
+        zip_ref.extractall(output_dir)
+
+    tiddlers = []
+
+    for root, dirs, files in os.walk(output_dir):
+        for file in files:
+            if file.endswith('.json'):
+                json_file_path = os.path.join(root, file)
+                with open(json_file_path, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+
+                if isinstance(data, list):
+                    for item in data:
+                        process_conversation(item, tiddlers)
+                else:
+                    process_conversation(data, tiddlers)
+
+                # Remove the processed JSON file
+                os.remove(json_file_path)
+
+    output_filename = os.path.join(output_dir, 'processed_data.json')
+    with open(output_filename, 'w', encoding='utf-8') as f:
+        json.dump(tiddlers, f, indent=4)
+
+def process_conversation(data, tiddlers):
+    # Generate a single conversation ID
+    conversation_id = str(uuid.uuid4())[:8] + '-' + str(uuid.uuid4())[9:13] + '-' + str(uuid.uuid4())[14:18] + '-' + str(uuid.uuid4())[19:23] + '-' + str(uuid.uuid4())[24:]
+
+    # Create a tiddler representing the conversation
+    conversation_tiddler = {
+        'title': conversation_id,
+        'tags': 'chatgptconversation',
+        'chatgptelement': 'conversation',
+        'conversation_title': data['title']
+    }
+    tiddlers.append(conversation_tiddler)
+
+    for i, (node_id, node_data) in enumerate(data['mapping'].items(), start=1):
+        message = node_data['message']
+        if message and message['create_time'] is not None:
+            message_id = str(uuid.uuid4())[:8] + '-' + str(uuid.uuid4())[9:13] + '-' + str(uuid.uuid4())[14:18] + '-' + str(uuid.uuid4())[19:23] + '-' + str(uuid.uuid4())[24:]
+            timestamp = str(int(message['create_time'] * 1000))  # Convert to milliseconds
+            title = f"conv{conversation_id}_msg{i}_{message_id}"
+
+            tiddler = {
+                'title': title,
+                'text': message['content']['parts'][0],
+                'author': message['author']['role'],
+                'conversation_id': conversation_id,  # Use the same conversation ID for all messages
+                'message_id': message_id,
+                'tags': 'chatgptmessage',
+                'timestamp': timestamp
+            }
+            tiddlers.append(tiddler)
+
+if __name__ == "__main__":
+    if len(sys.argv) != 3:
+        print("Usage: python import_json.py <input_zip_file> <output_directory>")
+        sys.exit(1)
+
+    input_file = sys.argv[1]
+    output_dir = sys.argv[2]
+
+    if not os.path.isfile(input_file):
+        print(f"Error: Input file '{input_file}' does not exist.")
+        sys.exit(1)
+
+    if not os.path.isdir(output_dir):
+        print(f"Error: Output directory '{output_dir}' does not exist.")
+        sys.exit(1)
+
+    process_exported_json(input_file, output_dir)
+```
+
+This modification should handle both cases where `data` is a list or a dictionary, allowing the script to process the JSON data correctly. Let me know if you encounter any issues!

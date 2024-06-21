@@ -1,0 +1,9 @@
+author: user
+conversation_id: 80de3e47-0f2a-4053-b6ee-83a6b6e7cf8d
+message_id: 2861a104-302d-4b24-b9a3-ecde7fc33204
+tags: chatgptmessage
+timestamp: 202406141525390000
+title: conv80de3e47-0f2a-4053-b6ee-83a6b6e7cf8d_msg2_2861a104-302d-4b24-b9a3-ecde7fc33204
+type: text/vnd.tiddlywiki
+
+instead of adding error handling, just ignore the last 3 digits of the timestamp
