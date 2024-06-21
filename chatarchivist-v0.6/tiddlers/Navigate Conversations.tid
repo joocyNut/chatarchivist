@@ -1,11 +1,11 @@
 chatarchivist: navigation
 created: 20240314032758535
-modified: 20240620173507783
+modified: 20240621184442003
 tags: TableOfContents
-title: Navigate conversation threads
+title: Navigate Conversations
 type: text/vnd.tiddlywiki
 
-For instructions on how to use CharArchivist, visit
+For instructions on how to use ChatArchivist, visit
 <div class="navigation_button">
 <$button>
 Get Started with ChatArchivist

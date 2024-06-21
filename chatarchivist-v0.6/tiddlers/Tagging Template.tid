@@ -1,12 +1,16 @@
 Annotation: on
 created: 20240611151652646
-modified: 20240620151240094
+modified: 20240621184204189
 tags: 
 title: Tagging Template
+type: text/vnd.tiddlywiki
 
 !!Template Selection
 
-Which template would you like to use? Dropdown Template puts all messages in a single area with the ability to open and close individual messages, and Button Template allows you to view the messages individually using buttons for navigation.
+Which template would you like to use? <br>
+The [[Full Conversation]] displays the whole conversation with the ability to open and close individual messages.<br>
+The [[Single Message]] allows you to view the messages in a conversation individually, using buttons for navigation.<br>
+The [[Full Conversation - Selected]] applies the capabilities of the [[Full Conversation]], but only shows messages selected by the user.
 
 <$select tiddler="whichTemplate">
 <$list filter='[tag[chatarchivist-template]!title[transcludeMessage]]'>
@@ -23,17 +27,17 @@ Use {{whichTemplate}}
 
 <!--remove $/tags/ViewTemplate-->
 <$list filter="[tag[chatarchivist-template]]">
-<$action-setfield tags="chatarchivist-template" Annotation="off"/>
+<$action-setfield tags="chatarchivist-template"/>
 
 </$list>
 <!--add $/tags/ViewTemplate-->
 <$list filter="[title{whichTemplate}]">
-<$action-setfield tags="$:/tags/ViewTemplate chatarchivist-template currentTemplate" Annotation={{!!Annotation}}/>
+<$action-setfield tags="$:/tags/ViewTemplate chatarchivist-template currentTemplate"/>
+</$list>
 <$list filter="[title{whichTemplate} field:Template[2]]">
-<$action-setfield $tiddler="transcludeMessage" tags="chatarchivist-template currentTemplate" Annotation={{!!Annotation}}/>
+<$action-setfield $tiddler="transcludeMessage" tags="chatarchivist-template currentTemplate" conversation_index="1"/>
 <$list filter="[tag[chatgptconversation]]">
 <$action-setfield $tiddler=<<currentTiddler>> conversation_index="1"/>
-</$list>
 </$list>
 </$list>
 </$button>

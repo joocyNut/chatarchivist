@@ -1,7 +1,8 @@
 created: 20240603162215016
-modified: 20240620145447267
+modified: 20240621163413129
 tags: $:/tags/ViewTemplate
 title: $:/core/ui/ViewTemplate/title
+type: text/vnd.tiddlywiki
 
 \whitespace trim
 \define title-styles()

@@ -1,5 +1,5 @@
 created: 20240329182907061
-modified: 20240620172545632
+modified: 20240621183935413
 tags: 
 title: ChatArchivist Documentation
 type: text/vnd.tiddlywiki
@@ -9,8 +9,8 @@ This is an initial iteration of chatarchivist, built in [[tiddlywiki|https://tid
 These are the tiddlers with necessary code: 
 <hr>
 template<br>
-[[Dropdown Template]] <br>
-[[Button Template]]
+[[Full Conversation]] <br>
+[[Single Message]]
 <$list filter="[!chatarchivist[]each[chatarchivist]]">
 <hr>{{!!chatarchivist}}<br>
 <$list filter="[chatarchivist{!!chatarchivist}]">

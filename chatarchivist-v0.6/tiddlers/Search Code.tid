@@ -1,5 +1,6 @@
 created: 20240603175730044
-modified: 20240620171857412
+modified: 20240621202140516
+sort-by: conversation_id
 tags: 
 title: Search Code
 type: text/vnd.tiddlywiki
@@ -8,12 +9,20 @@ type: text/vnd.tiddlywiki
 <div class="search-box">
 <$edit-text tiddler="SearchFor" field="text"/>
 </div>
-<$vars searchfor={{SearchFor!!text}}><br>
-Found <$count filter="[tag[chatgptconversation]search:conversation_title<searchfor>sort[title]]"/> conversations
+
+Sort: 
+<$select tiddler=<<currentTiddler>> field="sort-by">
+<option value="conversation_id">Alphabetically</option>
+<option value="created">Newest to Oldest</option>
+</$select>
+
+
+<$vars searchfor={{SearchFor!!text}} sort-by={{!!sort-by}}><br>
+Found <$count filter="[tag[chatgptconversation]!prefix[$]search:conversation_title<searchfor>]"/> conversations
 with "{{SearchFor!!text}}"
 <hr>
 <div class="scrollable-box">
-<$list filter="[tag[chatgptconversation]search:conversation_title<searchfor>sort[title]]">
+<$list filter="[tag[chatgptconversation]!prefix[$]search:conversation_title<searchfor>sort[{{!!sort-by}}]]">
 <$button class="tc-btn-invisible  tc-tiddlylink">
 <$view field="conversation_title"/>
 <$action-navigate $to={{!!title}}/>

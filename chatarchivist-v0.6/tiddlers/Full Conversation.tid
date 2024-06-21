@@ -3,9 +3,9 @@ Template: 1
 chatarchivist: template
 color: red
 created: 20240606185737317
-modified: 20240620193745548
+modified: 20240621184035248
 tags: $:/tags/ViewTemplate chatarchivist-template currentTemplate
-title: Dropdown Template
+title: Full Conversation
 type: text/vnd.tiddlywiki
 
 <$list filter="[is[current]tag[chatgptconversation]]">
