@@ -1,2 +1,12 @@
 $:/plugins/TheDiveO/FontAwesome
 [[Search Code]]
+[[MenuBar Annotation]]
+[[Delete Current Conversations]]
+Contents
+Settings
+[[Python Script to Convert Conversations to Tiddlers Using JSON From OpenAI]]
+[[Python Script to Convert Conversations to Tiddlers Using JSON From Superpower Extension]]
+[[Welcome to ChatArchivist]]
+[[Importing Chats]]
+[[Importing Chats Using OpenAI]]
+[[Importing Chats Using Superpower]]

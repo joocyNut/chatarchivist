@@ -1,18 +1,18 @@
 created: 20240611164516676
-modified: 20240613183110754
+modified: 20240624185102275
 tags: 
 title: Toggle Annotation
+type: text/vnd.tiddlywiki
 
 !!Annotation On/Off
 
-<$list filter="[title[Tagging Template]]">
+<list filter="[title[MenuBar Annotation]]">
 
 <div class="navigation_button">
 <$button>
-Annotation is currently {{!!Annotation}}
-<$action-listops $tiddler=<<currentTiddler>> $field="Annotation" $subfilter="+[toggle[on],[off]]" />
+Annotation is currently <$transclude $tiddler="MenuBar Annotation" $field="Annotation"/>
+<$action-listops $tiddler="MenuBar Annotation" $field="Annotation" $subfilter="+[toggle[on],[off]]" />
 </$button>
 </div>
 
 <hr>
-</$list>

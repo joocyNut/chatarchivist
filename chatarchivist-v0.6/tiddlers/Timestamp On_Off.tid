@@ -1,5 +1,5 @@
 created: 20240618195549160
-modified: 20240620173228368
+modified: 20240624175407449
 tags: 
 title: Timestamp On/Off
 type: text/vnd.tiddlywiki
@@ -7,6 +7,6 @@ type: text/vnd.tiddlywiki
 <div class="navigation_button">
 <$button>
 Show/Hide Timestamp
-<$action-listops $tiddler="Show Message Info" $field="genTimestamp" $subfilter="+[toggle[on],[off]]" />
+<$action-listops $tiddler="showMessageInfo" $field="genTimestamp" $subfilter="+[toggle[on],[off]]" />
 </$button>
 <hr>

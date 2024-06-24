@@ -1,21 +1,21 @@
 created: 20240603214354849
-modified: 20240619191632107
-tags: $:/tags/Macro $:/tags/Macros
+modified: 20240624184706617
+tags: $:/tags/Macro
 title: annotate-button-setfield
+type: text/vnd.tiddlywiki
 
 \define annotation-tiddler() $(message_id)$-Annotation
 
 \define annotate(message_id)
-<$list filter="[field:Annotation[on]]">
+<$list filter="[title[MenuBar Annotation]Annotation[on]]">
 <$vars message_id=$message_id$>
 <$button>
 Annotate
 <$action-setfield 
 $tiddler=<<annotation-tiddler>> 
-tags="Annotation" 
-color="green"
+tags="Annotation"
 chatarchivist="annotation"
-message-timestamp=<<message_id>>/>
+message_id=<<message_id>>/>
 <$action-sendmessage $message="tm-edit-tiddler" $param=<<annotation-tiddler>>/>
 </$button>
 <div class="annotation">

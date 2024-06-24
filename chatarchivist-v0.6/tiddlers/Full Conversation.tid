@@ -3,8 +3,8 @@ Template: 1
 chatarchivist: template
 color: red
 created: 20240606185737317
-modified: 20240621184035248
-tags: $:/tags/ViewTemplate chatarchivist-template currentTemplate
+modified: 20240624200823125
+tags: chatarchivist-template
 title: Full Conversation
 type: text/vnd.tiddlywiki
 
@@ -47,14 +47,13 @@ Close all
 <hr>
 
 <div class="show-message-info">
-<$macrocall $name="showMessageInfo"/><br>
-Tokens: <$editor-counter field="text" mode=word/> || 
-<$link/><br>
+<$macrocall $name="showMessageInfo" timestamp={{!!timestamp}} link={{!!title}}/><br>
+</div>
 
 <$list filter="[timestamp{!!timestamp}chatgptelement[]nsort[timestamp]nth{!!title}]">
 <$vars tiddler-title={{!!title}}>
 
-<div class="associating image with message">
+<!--
 <$details summary="Associate an image with this message">
 
 <$macrocall $name='image-picker' actions="
@@ -69,7 +68,6 @@ Tokens: <$editor-counter field="text" mode=word/> ||
 </$details>
 </div>
 
-<div class="picture in message">
 <$list filter="[chatgptelement[added-image]message{!!title}]">
 <div>
 <$image source=<<currentTiddler>> width="100"/>
@@ -80,5 +78,6 @@ Tokens: <$editor-counter field="text" mode=word/> ||
 </div>
 </$list>
 </div>
+-->
 </$vars>
 </$list>

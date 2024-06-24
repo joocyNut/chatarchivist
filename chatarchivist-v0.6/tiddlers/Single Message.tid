@@ -3,8 +3,8 @@ Template: 2
 color: red
 created: 20240131165435884
 description: this is the template to generate each conversation in a single tiddler. this is where all the formatting could take place. there is no css style sheet yet but the hooks are there
-modified: 20240621184035248
-tags: chatarchivist-template
+modified: 20240624200823126
+tags: $:/tags/ViewTemplate chatarchivist-template currentTemplate
 title: Single Message
 type: text/vnd.tiddlywiki
 

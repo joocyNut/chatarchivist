@@ -1,5 +1,5 @@
 created: 20240603175730044
-modified: 20240621202140516
+modified: 20240624174915850
 sort-by: conversation_id
 tags: 
 title: Search Code
@@ -15,7 +15,7 @@ Sort:
 <option value="conversation_id">Alphabetically</option>
 <option value="created">Newest to Oldest</option>
 </$select>
-
+<br>
 
 <$vars searchfor={{SearchFor!!text}} sort-by={{!!sort-by}}><br>
 Found <$count filter="[tag[chatgptconversation]!prefix[$]search:conversation_title<searchfor>]"/> conversations
